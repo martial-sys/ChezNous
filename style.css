@@ -1,0 +1,2488 @@
+/* 0: Réinitialisation et verrouillage horizontal – Évite les débordements latéraux indésirables */
+html, body {
+    overflow-x: hidden;       /* Supprime les scrolls horizontaux causés par des débordements */
+    width: 100%;              /* Force le corps à occuper toute la largeur de l’écran */
+    margin: 0;                /* Supprime les marges par défaut du navigateur */
+    padding: 0;               /* Supprime les paddings par défaut du navigateur */
+}
+
+/* Uniformise le calcul des dimensions pour tous les éléments */
+*, *::before, *::after {
+    box-sizing: border-box;   /* Évite les bugs de layout liés aux padding et borders */
+}
+
+/* ========================================= */
+/* 1. RÉINITIALISATION & VARIABLES GLOBALES CHEZ NOUS */
+/* ========================================= */
+
+/* Définitions des animations spécifiques aux boutons (Mises à jour pour Chez Nous) */
+@keyframes breathingGlow {
+    0%, 100% {
+        box-shadow: 0 0 0 var(--color-chez-nous-primary-transparent);
+        filter: brightness(100%);
+        transform: scale(1);
+    }
+    50% {
+        box-shadow: 0 0 35px var(--color-chez-nous-primary), 0 0 70px rgba(255, 179, 71, 0.7); /* RGBA pour --color-chez-nous-primary avec opacité */
+        filter: brightness(140%);
+        transform: scale(1.03);
+    }
+}
+
+/* Subtle Pulse Glow Animation - Version PLUS DOUCE ET CALME */
+@keyframes subtlePulseGlow {
+    0%, 100% {
+        box-shadow: 0 0 0 var(--color-chez-nous-primary-transparent);
+        filter: brightness(100%);
+        transform: scale(1); /* FIX : S'assure que le bouton ne change JAMAIS de taille */
+    }
+    50% {
+        box-shadow: 0 0 5px var(--color-chez-nous-primary); /* RÉDUIT DRATIQUEMENT : était 15px, maintenant 5px */
+        filter: brightness(103%); /* RÉDUIT DRATIQUEMENT : était 110%, maintenant 103% */
+        transform: scale(1); /* FIX : S'assure que le bouton ne change JAMAIS de taille */
+    }
+}
+
+/* Reset CSS de base (optimisé pour la modernité et la performance) */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    /* AJOUT VALIDÉ : Transition globale douce pour tous les éléments interactifs. */
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease, opacity 0.3s ease;
+}
+
+html {
+    scroll-behavior: smooth;
+    font-size: var(--base-font-size);
+    /* AJOUT VALIDÉ : Lissage des polices pour un rendu plus net et moderne sur tous les écrans */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+}
+
+body {
+    font-family: var(--font-family-primary);
+    line-height: 1.6;
+    color: var(--color-chez-nous-body-text); /* Mis à jour */
+    background-color: var(--color-background-primary); /* Mis à jour */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+    /* AJOUT VALIDÉ : Assure que les liens ont une transition douce aussi */
+    transition: color 0.3s ease, opacity 0.3s ease;
+}
+
+ul {
+    list-style: none;
+}
+
+/* --- VARIABLES GLOBALES CHEZ NOUS (Mises à jour complètes pour lisibilité et esthétique) --- */
+:root {
+    /* Couleurs Primaires "Chez Nous" (Douces, Chaudes, Inspirées des Couvertures) */
+    --color-chez-nous-primary: #FFB347; /* Un jaune-orangé doux, chaleur et optimisme */
+    --color-chez-nous-secondary: #FFD700; /* Or doux, pour l'éclat et la sagesse (comme le soleil) */
+    --color-chez-nous-accent: #8BC34A; /* Vert tendre, pour la croissance et la nature */
+    
+    --color-chez-nous-primary-transparent: rgba(255, 179, 71, 0.4); /* Version transparente de --color-chez-nous-primary */
+
+    --color-chez-nous-dark-text: #36454F; /* Gris-bleu foncé pour les titres (élégance, profondeur) */
+    --color-chez-nous-body-text: #5A5A5A; /* Gris plus doux pour le corps de texte */
+    --color-chez-nous-light-text: #888888; /* Gris clair pour les sous-textes */
+
+    /* Couleurs de Fond "Chez Nous" */
+    --color-background-primary: #FFF8F0; /* Crème très clair, ambiance chaleureuse et douce */
+    --color-background-secondary: #FDF3E7; /* Crème légèrement plus soutenue pour les sections alternées */
+    --color-background-highlight: #FFF0D9; /* Un jaune pâle pour les zones d'accentuation */
+    --color-background-card: #FFFFFF; /* Blanc pur pour les cartes (élévation) */
+
+    /* Couleurs de Statut et d'Accent (Maintenues car standards, mais utilisables avec discernement) */
+    --color-success-green: #28A745;
+    --color-warning-yellow: #FFC107;
+    --color-error-red: #DC3545;
+    
+    /* Bordures et Ombres (Ajustées pour une douceur accrue) */
+    --color-border-light: #E0E0E0; /* Bordure très discrète */
+    --shadow-light: 0 4px 15px rgba(0, 0, 0, 0.06); /* Ombre plus douce */
+    --shadow-medium: 0 10px 30px rgba(0, 0, 0, 0.1); /* Ombre équilibrée */
+    --shadow-strong: 0 20px 50px rgba(0, 0, 0, 0.15); /* Ombre prononcée */
+    --shadow-inset: inset 0 2px 4px rgba(0, 0, 0, 0.04);
+
+    /* Typographie (ajustée pour une meilleure lisibilité) */
+    --font-family-primary: 'Poppins', sans-serif;
+    --font-family-secondary: 'Roboto', sans-serif;
+    --base-font-size: 17px; /* AUGMENTÉ : Était 16px */
+
+    /* Espacements (maintenus) */
+    --spacing-unit: 8px;
+    --padding-section: 80px 0;
+    --padding-section-mobile: 40px 0;
+
+    /* Tailles de police variables pour la scalabilité (AUGMENTÉES légèrement pour meilleure lisibilité) */
+    --font-size-small: 0.9em;   /* Était 0.875em */
+    --font-size-medium: 1em;    /* Inchangé, sert de base */
+    --font-size-large: 1.15em;  /* Était 1.125em */
+    --font-size-xl: 1.6em;      /* Était 1.5em */
+    --font-size-xxl: 2.2em;     /* Était 2em */
+    --font-size-h1: 3.8em;      /* Était 3.5em */
+    --font-size-h2: 3em;        /* Était 2.8em */
+    --font-size-h3: 2.4em;      /* Était 2.2em */
+    --font-size-h4: 2em;        /* Était 1.8em */
+    --font-size-xxxl: 3.2em;    /* Était 3em */
+    --container-max-width: 1100px;
+}
+
+/* --- CORRECTION FORCEE COULEUR ICONES SECTIONS PROBLEME & SOLUTION --- */
+
+/* Pour l'icône principale de la section problème */
+.problem-section .icon-section {
+    color: var(--color-chez-nous-primary) !important; /* Force la couleur principale */
+}
+
+/* Pour les icônes des scénarios de la section problème */
+.scenario-item .scenario-icon {
+    color: var(--color-chez-nous-primary) !important; /* Force la couleur principale */
+}
+
+/* Pour l'icône principale de la section solution */
+.solution-section .icon-section {
+    color: var(--color-chez-nous-primary) !important; /* Force la couleur principale */
+}
+
+/* Pour les icônes des items de solution */
+.solution-item h3 i {
+    color: var(--color-chez-nous-primary) !important; /* Force la couleur principale */
+}
+/* --- FIN CORRECTION FORCEE --- */
+
+/* ========================================= */
+/* 2. STYLES DES COMPOSANTS GLOBALS (Mise à jour pour un look "Chez Nous") */
+/* ========================================= */
+/* Socle global pour TOUS les CTA génériques (maintenant couleur Chez Nous primaire) */
+.cta-button, .main-cta { /* Utilise .cta-button et .main-cta */
+    background: linear-gradient(135deg, var(--color-chez-nous-primary), var(--color-chez-nous-secondary)); /* Dégradé Chez Nous */
+    color: white;
+    padding: 14px 28px;
+    border: none;
+    border-radius: 999px; /* Forme pilule */
+    font-size: 16px; /* Taille conservée selon ta demande */
+    font-weight: 600;
+    font-family: var(--font-family-primary);
+    text-decoration: none;
+    display: inline-block;
+    cursor: pointer;
+    transition: all 0.25s ease, box-shadow 0.5s ease-out;
+    box-shadow: 0 0 0 rgba(0, 123, 255, 0.4); /* Ombre initiale transparente ou très subtile */
+    position: relative;
+    z-index: 1;
+    animation: pulse-shadow 5.5s infinite ease-out;
+}
+
+/* Effet de survol sur le bouton CTA global */
+.cta-button:hover, .main-cta:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(255, 179, 71, 0.6); /* Ombre Chez Nous au survol */
+    animation: none; /* Désactive l'animation au survol si désiré */
+}
+
+/* Effet au clic (active) */
+.cta-button:active, .main-cta:active {
+    transform: scale(0.95);
+    box-shadow: 0 4px 10px rgba(255, 179, 71, 0.4); /* Ombre Chez Nous au clic */
+}
+
+/* DÉFINITION DE L'ANIMATION DE PULSATION (pour la box-shadow) */
+@keyframes pulse-shadow {
+    0% { box-shadow: 0 0 0 var(--color-chez-nous-primary-transparent); } /* Utilise la variable transparente */
+    50% { box-shadow: 0 0 20px var(--color-chez-nous-primary), 0 0 40px rgba(255, 179, 71, 0.4); } /* Utilise la couleur principale Chez Nous */
+    100% { box-shadow: 0 0 0 var(--color-chez-nous-primary-transparent); } /* Utilise la variable transparente */
+}
+
+/* Styles pour le bouton CTA dans la solution-section */
+.solution-section .text-center {
+    width: 100%;
+    text-align: center;
+    margin-top: 40px;
+}
+
+.solution-section .cta-button.main-cta {
+    display: block;
+    margin: 0 auto;
+    max-width: 400px;
+}
+/* AJOUT : Styles pour le bouton CTA Sticky "Chez Nous" */
+#cta-sticky-button {
+    position: fixed; /* Reste en place lors du défilement */
+    bottom: 25px; /* Distance du bas de la fenêtre */
+    right: 25px; /* Distance de la droite de la fenêtre */
+    z-index: 1000; /* Assure qu'il est au-dessus de tout le reste */
+    transition: opacity 0.3s ease-out, visibility 0.3s ease-out, transform 0.3s ease-out; /* Transitions douces */
+    display: inline-flex; /* Permet d'aligner le texte et l'icône si tu en ajoutes une */
+    align-items: center;
+    justify-content: center;
+    padding: 15px 30px; /* Taille du padding */
+    border-radius: 999px; /* Forme pilule, cohérent avec tes autres CTA */
+    text-decoration: none;
+    font-size: var(--font-size-large); /* Utilise ta variable de taille de police */
+    font-weight: var(--font-weight-bold); /* Utilise ta variable de poids de police */
+    color: var(--color-background-card); /* Texte blanc */
+    background: linear-gradient(90deg, var(--color-chez-nous-primary), var(--color-chez-nous-secondary)); /* Dégradé "Chez Nous" */
+    box-shadow: var(--shadow-medium); /* Utilise ta variable d'ombre */
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    border: none;
+}
+
+/* État caché du bouton sticky */
+#cta-sticky-button.sticky-hidden {
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(50px); /* Descend légèrement pour l'effet de disparition */
+}
+
+/* État visible du bouton sticky */
+#cta-sticky-button:not(.sticky-hidden) {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0); /* Remonte à sa position normale */
+}
+
+/* Effets au survol */
+#cta-sticky-button:hover {
+    background: linear-gradient(90deg, var(--color-chez-nous-secondary), var(--color-chez-nous-primary)); /* Inverse le dégradé au survol */
+    box-shadow: var(--shadow-strong); /* Ombre plus prononcée au survol */
+    transform: translateY(-3px); /* Remonte légèrement au survol */
+}
+
+#cta-sticky-button:active {
+    transform: scale(0.95); /* Effet de clic */
+    box-shadow: var(--shadow-light); /* Ombre plus légère au clic */
+}
+
+/* Media Queries pour le bouton sticky (ajustements pour mobile) */
+@media (max-width: 768px) {
+    #cta-sticky-button {
+        bottom: 15px;
+        left: 10px; /* Aligne à gauche sur mobile */
+        right: auto; /* Désactive l'alignement à droite */
+        width: calc(100% - 20px); /* Prend presque toute la largeur */
+        max-width: none; /* Pas de largeur maximale */
+        padding: 12px 15px;
+        font-size: var(--font-size-medium);
+        white-space: normal; /* Permet au texte de s'enrouler si long */
+        text-align: center;
+    }
+}
+
+@media (max-width: 400px) {
+    #cta-sticky-button {
+        padding: 10px;
+        font-size: var(--font-size-small);
+    }
+}
+
+/* ========================================= */
+/* 3.--- STYLES GÉNÉRIQUES POUR SECTIONS --- */
+/* ========================================= */
+section {
+    padding: var(--padding-section);
+    position: relative;
+    overflow: hidden;
+}
+
+section h2 {
+    font-size: 3.2em; /* Taille conservée selon ta demande */
+    color: var(--color-chez-nous-dark-text); /* Nouvelle couleur de titre */
+    text-align: center;
+    margin-bottom: calc(var(--spacing-unit) * 3.125);
+    padding-bottom: calc(var(--spacing-unit) * 2.5);
+    position: relative;
+    line-height: 1.3;
+    font-weight: 700;
+}
+
+section h2::after {
+    content: '';
+    display: block;
+    width: 80px;
+    height: 4px;
+    background: linear-gradient(90deg, var(--color-chez-nous-primary), var(--color-chez-nous-secondary)); /* Nouveau dégradé pour les titres */
+    margin: calc(var(--spacing-unit) * 1.25) auto 0 auto;
+    border-radius: 2px;
+}
+
+.icon-section {
+    font-size: 4.5em; /* Taille conservée selon ta demande */
+    color: var(--color-chez-nous-primary); /* Nouvelle couleur principale pour les icônes */
+    margin-bottom: calc(var(--spacing-unit) * 3.125);
+    display: block;
+    text-align: center;
+}
+
+.section-intro {
+    font-size: var(--font-size-large); /* Taille conservée selon ta demande */
+    color: var(--color-chez-nous-light-text); /* Nouvelle couleur de texte plus douce */
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto calc(var(--spacing-unit) * 6.25) auto;
+    line-height: 1.7;
+}
+
+/* AJOUT : Styles pour les textes mis en évidence (suppression zigzag) */
+.highlight-text, .highlight-text-secondary {
+    text-decoration: none !important; /* Supprime tout soulignement pour le texte mis en évidence */
+}
+
+/* AJOUT : Styles pour la couleur des textes mis en évidence (utilisant les nouvelles variables) */
+.highlight-text {
+    color: var(--color-chez-nous-primary);
+}
+.highlight-text-secondary {
+    color: var(--color-chez-nous-secondary);
+}
+
+/* AJOUT : Styles pour le bouton CTA Sticky (utilisant les nouvelles couleurs, sans changer les tailles) */
+#cta-sticky-button {
+    position: fixed;
+    bottom: 25px;
+    right: 25px;
+    z-index: 1000;
+    transition: opacity 0.3s ease-out, visibility 0.3s ease-out, transform 0.3s ease-out;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 15px 30px;
+    border-radius: 8px; /* Reste 8px comme dans ton code initial */
+    text-decoration: none;
+    font-size: var(--font-size-large); /* Taille conservée selon ta demande */
+    font-weight: 700;
+    color: #FFF;
+    background: var(--color-chez-nous-primary); /* Nouvelle couleur */
+    box-shadow: var(--shadow-medium);
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    border: none;
+}
+
+#cta-sticky-button.sticky-hidden {
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(50px);
+}
+
+#cta-sticky-button:not(.sticky-hidden) {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+#cta-sticky-button:hover {
+    background: var(--color-chez-nous-secondary); /* Nouvelle couleur */
+    box-shadow: var(--shadow-strong);
+    transform: translateY(-3px);
+}
+#cta-sticky-button:active {
+    transform: scale(0.95);
+    box-shadow: var(--shadow-light);
+}
+
+@media (max-width: 768px) {
+    #cta-sticky-button {
+        bottom: 15px;
+        left: 10px;
+        right: auto;
+        width: calc(100% - 20px);
+        max-width: none;
+        padding: 12px 15px;
+        font-size: var(--font-size-medium); /* Taille conservée selon ta demande */
+        white-space: normal;
+        text-align: center;
+    }
+}
+
+@media (max-width: 400px) {
+    #cta-sticky-button {
+        padding: 10px;
+        font-size: var(--font-size-small); /* Taille conservée selon ta demande */
+    }
+}
+
+
+
+/* ========================================= */
+/* --- SECTION HERO (Adaptée pour Chez Nous) --- */
+/* ========================================= */
+.hero-section {
+    /* Mise à jour des couleurs de fond pour la palette "Chez Nous" */
+    background: linear-gradient(135deg, var(--color-background-primary) 0%, var(--color-background-highlight) 100%);
+    padding: calc(var(--spacing-unit) * 12.5) 0;
+    text-align: center;
+}
+
+.hero-section .hero-content {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 calc(var(--spacing-unit) * 2.5);
+}
+
+.hero-section h1 {
+    font-size: 4.2em; /* Taille conservée selon ta demande */
+    color: var(--color-chez-nous-dark-text); /* Nouvelle couleur de titre Chez Nous */
+    line-height: 1.1;
+    margin-bottom: calc(var(--spacing-unit) * 3.125);
+    font-weight: 800;
+}
+
+.hero-section .subtitle {
+    font-size: 1.7em; /* Taille conservée selon ta demande */
+    color: var(--color-chez-nous-primary); /* Nouvelle couleur principale Chez Nous */
+    font-weight: 600;
+    margin-bottom: calc(var(--spacing-unit) * 4.375);
+    line-height: 1.3;
+}
+
+.hero-section .intro-paragraph {
+    font-size: 1.15em; /* Taille conservée selon ta demande */
+    color: var(--color-chez-nous-body-text); /* Nouvelle couleur de texte du corps Chez Nous */
+    max-width: 750px;
+    margin: 0 auto calc(var(--spacing-unit) * 6.25) auto;
+    line-height: 1.7;
+}
+
+.hero-section .cta-subtext {
+    font-size: 1.05em; /* Taille conservée selon ta demande */
+    color: var(--color-chez-nous-light-text); /* Nouvelle couleur de texte clair Chez Nous */
+    margin-top: calc(var(--spacing-unit) * 3.125);
+    line-height: 1.5;
+}
+/* ========================================= */
+/* --- SECTION HERO (CONTRASTE OPTIMISÉ) --- */
+/* ========================================= */
+
+/* ... (conserve tout le code de la section .hero-section jusqu'à .hero-title) ... */
+
+.hero-title {
+    font-size: var(--font-size-h1);
+    color: var(--color-chez-nous-dark-text); /* Couleur foncée pour le titre principal */
+    margin-bottom: calc(var(--spacing-unit) * 4);
+    line-height: 1.2;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+}
+
+.hero-title .highlight-text {
+    /* CORRECTION CONTRASTE : Utilisation de la couleur de texte foncée pour un contraste maximal */
+    color: var(--color-chez-nous-dark-text); 
+    text-decoration: none; /* Maintien de la suppression du soulignement zigzag */
+    font-weight: 800; /* Maintien du gras pour la mise en évidence */
+}
+
+/* ... (conserve le code de la section .hero-description) ... */
+
+/* CORRECTION CONTRASTE : Pour le sous-titre */
+.hero-section .subtitle {
+    font-size: 1.7em;
+    /* CHANGEMENT CLÉ : Utilise la couleur de texte foncée pour un bien meilleur contraste */
+    color: var(--color-chez-nous-dark-text); 
+    font-weight: 600;
+    margin-bottom: calc(var(--spacing-unit) * 4.375);
+    line-height: 1.3;
+}
+
+/* ... (conserve tout le reste du code CSS de hero-section et ses media queries) ... */
+
+
+/* ========================================= */
+/* --- SECTION PROBLÈME (SCÉNARIOS) --- */
+/* ========================================= */
+.problem-section {
+    background-color: var(--color-background-secondary); /* Nouvelle couleur de fond "Chez Nous" pour contraste */
+}
+
+.problem-section h2 {
+    font-size: 2.8em; /* Taille inchangée */
+    margin-bottom: calc(var(--spacing-unit) * 2.5);
+    color: var(--color-chez-nous-dark-text); /* Nouvelle couleur de titre "Chez Nous" */
+}
+
+.problem-section .intro-problem-text {
+    font-size: 1.2em; /* Taille inchangée */
+    text-align: center;
+    max-width: 750px;
+    margin: 0 auto calc(var(--spacing-unit) * 6.25) auto;
+    color: var(--color-chez-nous-body-text); /* Nouvelle couleur de texte "Chez Nous" */
+}
+
+.problem-scenarios-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: calc(var(--spacing-unit) * 3.75);
+    margin-top: calc(var(--spacing-unit) * 5);
+    margin-bottom: calc(var(--spacing-unit) * 6.25);
+}
+
+.scenario-item {
+    background-color: var(--color-background-card); /* Nouvelle couleur de fond "Chez Nous" pour les cartes */
+    padding: calc(var(--spacing-unit) * 3.75);
+    border-radius: 10px;
+    box-shadow: var(--shadow-medium);
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 1px solid var(--color-border-light);
+}
+
+.scenario-item:hover {
+    transform: translateY(calc(var(--spacing-unit) * -1));
+    box-shadow: var(--shadow-strong);
+}
+
+.scenario-item .scenario-icon {
+    font-size: 3.5em; /* Taille inchangée */
+    color: var(--color-chez-nous-primary); /* Nouvelle couleur principale "Chez Nous" pour les icônes */
+    margin-bottom: calc(var(--spacing-unit) * 2.5);
+}
+
+.scenario-item h3 {
+    font-size: 1.6em; /* Taille inchangée */
+    color: var(--color-chez-nous-dark-text); /* Nouvelle couleur de titre "Chez Nous" */
+    margin-bottom: calc(var(--spacing-unit) * 1.875);
+    line-height: 1.3;
+}
+
+.scenario-item p {
+    font-size: 1.05em; /* Taille inchangée */
+    color: var(--color-chez-nous-light-text); /* Nouvelle couleur de texte clair "Chez Nous" */
+}
+
+.problem-section .call-to-action-problem {
+    font-size: 1.4em; /* Taille inchangée */
+    font-weight: 600;
+    color: var(--color-chez-nous-primary); /* Nouvelle couleur principale "Chez Nous" pour le CTA */
+    margin-top: calc(var(--spacing-unit) * 6.25);
+    text-align: center;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.5;
+}
+
+/* ========================================= */
+/* --- SECTION SOLUTION (AVANTAGES) --- */
+/* ========================================= */
+.solution-section {
+    background-color: var(--color-background-primary); /* Conserve la couleur de fond primaire "Chez Nous" */
+}
+.solution-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: calc(var(--spacing-unit) * 3.75);
+    margin-top: calc(var(--spacing-unit) * 5);
+}
+.solution-item {
+    background-color: var(--color-background-card); /* Nouvelle couleur de fond "Chez Nous" pour les cartes */
+    padding: calc(var(--spacing-unit) * 3.75);
+    border-radius: 10px;
+    box-shadow: var(--shadow-medium);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    text-align: left;
+    border: 1px solid var(--color-border-light);
+}
+.solution-item:hover {
+    transform: translateY(calc(var(--spacing-unit) * -1));
+    box-shadow: var(--shadow-strong);
+}
+.solution-item h3 {
+    font-size: 1.6em; /* Taille inchangée */
+    color: var(--color-chez-nous-dark-text); /* Nouvelle couleur de titre "Chez Nous" */
+    margin-bottom: calc(var(--spacing-unit) * 1.875);
+    line-height: 1.3;
+    display: flex;
+    align-items: center;
+}
+.solution-item h3 i {
+    color: var(--color-chez-nous-primary); /* Nouvelle couleur principale "Chez Nous" pour les icônes */
+    margin-right: calc(var(--spacing-unit) * 1.5);
+    font-size: 1.2em;
+}
+.solution-item p {
+    font-size: 1.05em; /* Taille inchangée */
+    color: var(--color-chez-nous-body-text); /* Nouvelle couleur de texte "Chez Nous" */
+    line-height: 1.6;
+}
+
+
+/* ========================================= */
+/* --- SECTION CONTENU / THÈMES --- */
+/* ========================================= */
+.content-section {
+    background-color: var(--color-background-soft); /* Conserve la couleur de fond actuelle */
+}
+.content-section .icon-section {
+    color: var(--color-chez-nous-primary); /* Nouvelle couleur principale "Chez Nous" pour l'icône de section */
+}
+.themes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: calc(var(--spacing-unit) * 3.75);
+    margin-top: calc(var(--spacing-unit) * 5);
+    margin-bottom: calc(var(--spacing-unit) * 6.25);
+}
+.theme-item {
+    background-color: var(--color-background-card); /* Nouvelle couleur de fond "Chez Nous" pour les cartes */
+    padding: calc(var(--spacing-unit) * 3.75);
+    border-radius: 10px;
+    box-shadow: var(--shadow-medium);
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 1px solid var(--color-border-light);
+}
+.theme-item:hover {
+    transform: translateY(calc(var(--spacing-unit) * -1));
+    box-shadow: var(--shadow-strong);
+}
+.theme-item .theme-icon {
+    font-size: 3.5em; /* Taille inchangée */
+    color: var(--color-chez-nous-accent); /* Nouvelle couleur d'accent "Chez Nous" pour les icônes des thèmes */
+    margin-bottom: calc(var(--spacing-unit) * 2.5);
+}
+.theme-item h3 {
+    font-size: 1.6em; /* Taille inchangée */
+    color: var(--color-chez-nous-dark-text); /* Nouvelle couleur de titre "Chez Nous" */
+    margin-bottom: calc(var(--spacing-unit) * 1.875);
+    line-height: 1.3;
+}
+.theme-item p {
+    font-size: 1.05em; /* Taille inchangée */
+    color: var(--color-chez-nous-body-text); /* Nouvelle couleur de texte "Chez Nous" */
+}
+
+/* -------------------------------------------------------------------------- */
+/* SECTION HISTOIRE D'AÏSHA */
+/* -------------------------------------------------------------------------- */
+.aisha-story-section {
+    background-color: var(--color-background-primary); /* Conserve la couleur de fond primaire "Chez Nous" */
+    padding: var(--padding-section);
+    text-align: center;
+}
+.aisha-story-section .icon-section {
+    color: var(--color-chez-nous-primary); /* Nouvelle couleur principale "Chez Nous" pour l'icône de section */
+    margin-bottom: calc(var(--spacing-unit) * 5);
+}
+.aisha-story-section h2 {
+    font-size: 2.8em; /* Taille inchangée */
+    color: var(--color-chez-nous-dark-text); /* Nouvelle couleur de titre "Chez Nous" */
+    margin-bottom: calc(var(--spacing-unit) * 5);
+    line-height: 1.3;
+}
+.aisha-story-section .aisha-story-block {
+    background-color: var(--color-background-secondary); /* Nouvelle couleur de fond "Chez Nous" pour le bloc histoire */
+    border-left: 5px solid var(--color-chez-nous-primary); /* Nouvelle couleur principale "Chez Nous" pour la bordure */
+    padding: calc(var(--spacing-unit) * 5);
+    border-radius: 15px;
+    box-shadow: var(--shadow-medium);
+    max-width: 850px;
+    margin: 0 auto calc(var(--spacing-unit) * 5) auto;
+    text-align: left;
+    border: 1px solid var(--color-border-light);
+}
+.aisha-story-section .aisha-story-block p {
+    font-size: 1.15em; /* Taille inchangée */
+    color: var(--color-chez-nous-body-text); /* Nouvelle couleur de texte "Chez Nous" */
+    line-height: 1.7;
+    margin-bottom: calc(var(--spacing-unit) * 2.5);
+}
+.aisha-story-section .aisha-story-block p:last-child {
+    margin-bottom: 0;
+}
+.aisha-story-section .story-lesson-text {
+    font-size: 1.3em; /* Taille inchangée */
+    font-weight: 500;
+    color: var(--color-chez-nous-dark-text); /* Nouvelle couleur de texte foncée "Chez Nous" pour la leçon */
+    max-width: 900px;
+    margin: 0 auto;
+    line-height: 1.6;
+    margin-bottom: calc(var(--spacing-unit) * 3.75);
+}
+
+/* NOUVEAU STYLE POUR LE BOUTON CTA SPÉCIFIQUE À LA SECTION AÏSHA */
+.aisha-story-section .cta-button {
+    margin-top: calc(var(--spacing-unit) * 2.5);
+}
+
+/* NOUVEAU STYLE POUR LE TEXTE DE DISCLAIMER SOUS LE BOUTON */
+.aisha-story-section .aisha-disclaimer-text {
+    font-size: 14px; /* Taille inchangée */
+    color: var(--color-chez-nous-light-text); /* Nouvelle couleur de texte clair "Chez Nous" */
+    margin-top: calc(var(--spacing-unit) * 2.5);
+    text-align: center;
+}
+
+/* ========================================= */
+/* --- MEDIA QUERIES (RESPONSIVE DESIGN) --- */
+/* (Ordre du plus grand au plus petit pour max-width) */
+/* ========================================= */
+
+@media (max-width: 992px) {
+    /* Ajustements généraux pour tablettes (992px et moins) */
+    section {
+        padding: calc(var(--spacing-unit) * 7.5) 0; /* 60px -> 7.5 * 8 = 60px */
+    }
+    section h2 {
+        font-size: 2.8em;
+        margin-bottom: calc(var(--spacing-unit) * 2.5); /* 20px -> 2.5 * 8 = 20px */
+        padding-bottom: calc(var(--spacing-unit) * 1.875); /* 15px -> 1.875 * 8 = 15px */
+    }
+    section h2::after {
+        width: 60px;
+        height: 3px;
+        margin: calc(var(--spacing-unit) * 1.25) auto 0 auto; /* 10px -> 1.25 * 8 = 10px */
+    }
+    .icon-section {
+        color: var(--color-primary-blue);
+        margin-bottom: calc(var(--spacing-unit) * 2.5); /* 20px -> 2.5 * 8 = 20px */
+    }
+    .section-intro {
+        font-size: 1.15em;
+        margin-bottom: calc(var(--spacing-unit) * 5); /* 40px -> 5 * 8 = 40px */
+    }
+
+    /* Hero Section */
+    .hero-section {
+        padding: calc(var(--spacing-unit) * 10) 0; /* 80px -> 10 * 8 = 80px */
+    }
+    .hero-section h1 {
+        font-size: 3.5em;
+    }
+    .hero-section .subtitle {
+        font-size: 1.5em;
+    }
+    .hero-section .intro-paragraph {
+        font-size: 1.05em;
+        margin-bottom: calc(var(--spacing-unit) * 5); /* 40px -> 5 * 8 = 40px */
+    }
+    .hero-section .cta-subtext {
+        font-size: 1em;
+    }
+
+    /* Problem Section */
+    .problem-section h2 {
+        font-size: 2.5em;
+    }
+    .problem-section .intro-problem-text {
+        font-size: 1.1em;
+        margin-bottom: calc(var(--spacing-unit) * 3.75); /* 30px -> 3.75 * 8 = 30px */
+    }
+    .problem-scenarios-grid {
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: calc(var(--spacing-unit) * 3.125); /* 25px -> 3.125 * 8 = 25px */
+        margin-bottom: calc(var(--spacing-unit) * 5); /* 40px -> 5 * 8 = 40px */
+    }
+    .scenario-item {
+        padding: calc(var(--spacing-unit) * 3.125); /* 25px -> 3.125 * 8 = 25px */
+    }
+    .scenario-item .scenario-icon {
+        font-size: 3em;
+    }
+    .scenario-item h3 {
+        font-size: 1.4em;
+    }
+    .problem-section .call-to-action-problem {
+        font-size: 1.2em;
+        margin-top: calc(var(--spacing-unit) * 5); /* 40px -> 5 * 8 = 40px */
+    }
+
+    /* Solution Section */
+    .solution-grid {
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: calc(var(--spacing-unit) * 3.125); /* 25px -> 3.125 * 8 = 25px */
+    }
+    .solution-item {
+        padding: calc(var(--spacing-unit) * 3.125); /* 25px -> 3.125 * 8 = 25px */
+    }
+    .solution-item h3 {
+        font-size: 1.4em;
+    }
+    .solution-item h3 i {
+        font-size: 1.1em;
+    }
+    .solution-item p {
+        font-size: 1em;
+    }
+
+    /* Content/Themes Section */
+    .themes-grid {
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: calc(var(--spacing-unit) * 3.125); /* 25px -> 3.125 * 8 = 25px */
+        margin-bottom: calc(var(--spacing-unit) * 5); /* 40px -> 5 * 8 = 40px */
+    }
+    .theme-item {
+        padding: calc(var(--spacing-unit) * 3.125); /* 25px -> 3.125 * 8 = 25px */
+    }
+    .theme-item .theme-icon {
+        font-size: 3em;
+    }
+    .theme-item h3 {
+        font-size: 1.4em;
+    }
+
+    /* Aisha Story Section */
+    .aisha-story-section h2 {
+        font-size: 2.5em;
+    }
+    .aisha-story-section .aisha-story-block {
+        padding: calc(var(--spacing-unit) * 3.75); /* 30px -> 3.75 * 8 = 30px */
+    }
+    .aisha-story-section .aisha-story-block p {
+        font-size: 1.1em;
+    }
+    .aisha-story-section .story-lesson-text {
+        font-size: 1.2em;
+    }
+
+    /* Garantie Section */
+    .guarantee-content-block {
+        padding: calc(var(--spacing-unit) * 4.375); /* 35px -> 4.375 * 8 = 35px */
+    }
+    .guarantee-content-block .guarantee-icon-large {
+        font-size: 3.5em;
+        margin-bottom: calc(var(--spacing-unit) * 2.5); /* 20px -> 2.5 * 8 = 20px */
+    }
+    .guarantee-content-block h3 {
+        font-size: 1.8em;
+    }
+    .guarantee-content-block p {
+        font-size: 1.05em;
+    }
+    .guarantee-content-block .guarantee-cta-text {
+        font-size: 1.1em;
+    }
+}
+
+@media (max-width: 768px) {
+    /* Ajustements généraux pour mobiles et tablettes plus petites (768px et moins) */
+    section {
+        padding: calc(var(--spacing-unit) * 5) 0; /* 40px -> 5 * 8 = 40px */
+    }
+    section h2 {
+        font-size: 2.2em;
+        margin-bottom: calc(var(--spacing-unit) * 1.875); /* 15px -> 1.875 * 8 = 15px */
+        padding-bottom: calc(var(--spacing-unit) * 1.25); /* 10px -> 1.25 * 8 = 10px */
+    }
+    section h2::after {
+        width: 50px;
+        height: 2px;
+        margin: calc(var(--spacing-unit) * 0.625) auto 0 auto; /* 5px -> 0.625 * 8 = 5px */
+    }
+    .icon-section {
+        color: var(--color-primary-blue);
+        margin-bottom: calc(var(--spacing-unit) * 1.875); /* 15px -> 1.875 * 8 = 15px */
+    }
+    .section-intro {
+        font-size: 1em;
+        margin-bottom: calc(var(--spacing-unit) * 3.75); /* 30px -> 3.75 * 8 = 30px */
+    }
+
+    .hero-section {
+        padding: calc(var(--spacing-unit) * 7.5) 0; /* 60px -> 7.5 * 8 = 60px */
+    }
+    .hero-section h1 {
+        font-size: 2.8em;
+    }
+    .hero-section .subtitle {
+        font-size: 1.3em;
+    }
+    .hero-section .intro-paragraph {
+        font-size: 1em;
+        margin-bottom: calc(var(--spacing-unit) * 3.75); /* 30px -> 3.75 * 8 = 30px */
+    }
+    .hero-section .cta-subtext {
+        font-size: 0.95em;
+    }
+
+    .problem-section h2 {
+        font-size: 2.2em;
+    }
+    .problem-section .intro-problem-text {
+        font-size: 1em;
+        margin-bottom: calc(var(--spacing-unit) * 2.5); /* 20px -> 2.5 * 8 = 20px */
+    }
+    .problem-scenarios-grid {
+        grid-template-columns: 1fr;
+        gap: calc(var(--spacing-unit) * 2.5); /* 20px -> 2.5 * 8 = 20px */
+        margin-bottom: calc(var(--spacing-unit) * 3.75); /* 30px -> 3.75 * 8 = 30px */
+    }
+    .scenario-item {
+        padding: calc(var(--spacing-unit) * 2.5); /* 20px -> 2.5 * 8 = 20px */
+    }
+    .scenario-item .scenario-icon {
+        font-size: 2.5em;
+    }
+    .scenario-item h3 {
+        font-size: 1.2em;
+    }
+    .problem-section .call-to-action-problem {
+        font-size: 1.1em;
+        margin-top: calc(var(--spacing-unit) * 3.75); /* 30px -> 3.75 * 8 = 30px */
+    }
+
+    .solution-grid {
+        grid-template-columns: 1fr;
+        gap: calc(var(--spacing-unit) * 2.5); /* 20px -> 2.5 * 8 = 20px */
+    }
+    .solution-item {
+        padding: calc(var(--spacing-unit) * 2.5); /* 20px -> 2.5 * 8 = 20px */
+    }
+    .solution-item h3 {
+        font-size: 1.2em;
+    }
+    .solution-item h3 i {
+        font-size: 1em;
+    }
+    .solution-item p {
+        font-size: 0.95em;
+    }
+
+    .themes-grid {
+        grid-template-columns: 1fr;
+        gap: calc(var(--spacing-unit) * 2.5); /* 20px -> 2.5 * 8 = 20px */
+        margin-bottom: calc(var(--spacing-unit) * 3.75); /* 30px -> 3.75 * 8 = 30px */
+    }
+    .theme-item {
+        padding: calc(var(--spacing-unit) * 2.5); /* 20px -> 2.5 * 8 = 20px */
+    }
+    .theme-item .theme-icon {
+        font-size: 2.5em;
+    }
+    .theme-item h3 {
+        font-size: 1.2em;
+    }
+
+    /* Aisha Story Section */
+    .aisha-story-section h2 {
+        font-size: 2em;
+    }
+    .aisha-story-section .aisha-story-block {
+        padding: calc(var(--spacing-unit) * 2.5); /* 20px -> 2.5 * 8 = 20px */
+        margin-bottom: calc(var(--spacing-unit) * 3.125); /* 25px -> 3.125 * 8 = 25px */
+    }
+    .aisha-story-section .aisha-story-block p {
+        font-size: 0.95em;
+    }
+    .aisha-story-section .story-lesson-text {
+        font-size: 1em;
+    }
+
+    /* Garantie Section */
+    .guarantee-section {
+        padding: calc(var(--spacing-unit) * 7.5) 0; /* 60px -> 7.5 * 8 = 60px */
+    }
+    .guarantee-content-block {
+        margin-top: calc(var(--spacing-unit) * 5); /* 40px -> 5 * 8 = 40px */
+        padding: calc(var(--spacing-unit) * 3.75); /* 30px -> 3.75 * 8 = 30px */
+    }
+    .guarantee-content-block .guarantee-icon-large {
+        font-size: 3em;
+        margin-bottom: calc(var(--spacing-unit) * 1.875); /* 15px -> 1.875 * 8 = 15px */
+    }
+    .guarantee-content-block h3 {
+        font-size: 1.6em;
+    }
+    .guarantee-content-block p {
+        font-size: 1em;
+    }
+    .guarantee-content-block .guarantee-cta-text {
+        font-size: 1.05em;
+    }
+
+    /* Footer adjustments for small screens */
+    .footer-grid-layout {
+        grid-template-columns: 1fr;
+        gap: calc(var(--spacing-unit) * 3.75); /* 30px -> 3.75 * 8 = 30px */
+    }
+    .footer-nav-area,
+    .footer-info-area {
+        text-align: center;
+    }
+    .footer-nav-area h4,
+    .footer-info-area h4 {
+        text-align: center;
+        margin-bottom: calc(var(--spacing-unit) * 1.875); /* 15px -> 1.875 * 8 = 15px */
+    }
+    .footer-social {
+        justify-content: center;
+        margin-top: calc(var(--spacing-unit) * 1.875); /* 15px -> 1.875 * 8 = 15px */
+    }
+    .footer-social a {
+        margin: 0 calc(var(--spacing-unit) * 1.25); /* 10px -> 1.25 * 8 = 10px */
+    }
+}
+
+@media (max-width: 480px) {
+    /* Ajustements généraux pour mobiles étroits (480px et moins) */
+    .container {
+        padding: 0 calc(var(--spacing-unit) * 1.875); /* 15px -> 1.875 * 8 = 15px */
+    }
+    section h2 {
+        font-size: 1.8em;
+    }
+    .hero-section h1 {
+        font-size: 2.2em;
+    }
+    .hero-section .subtitle {
+        font-size: 1.1em;
+    }
+    .problem-section h2,
+    .solution-section h2,
+    .content-section h2,
+    .aisha-story-section h2 {
+        font-size: 1.8em;
+    }
+    .scenario-item .scenario-icon,
+    .theme-item .theme-icon {
+        font-size: 2em;
+    }
+    .scenario-item h3,
+    .theme-item h3 {
+        font-size: 1.1em;
+    }
+
+    /* Garantie Section */
+    .guarantee-content-block {
+        padding: calc(var(--spacing-unit) * 3.125); /* 25px -> 3.125 * 8 = 25px */
+    }
+    .guarantee-content-block .guarantee-icon-large {
+        font-size: 2.5em;
+    }
+    .guarantee-content-block h3 {
+        font-size: 1.4em;
+    }
+    .guarantee-content-block p {
+        font-size: 0.95em;
+    }
+    .guarantee-content-block .guarantee-cta-text {
+        font-size: 1em;
+    }
+
+    /* Footer adjustments for small screens */
+    .footer-grid-layout {
+        grid-template-columns: 1fr;
+        gap: calc(var(--spacing-unit) * 3.75); /* 30px -> 3.75 * 8 = 30px */
+    }
+    .footer-nav-area,
+    .footer-info-area {
+        text-align: center;
+    }
+    .footer-nav-area h4,
+    .footer-info-area h4 {
+        text-align: center;
+        margin-bottom: calc(var(--spacing-unit) * 1.875); /* 15px -> 1.875 * 8 = 15px */
+    }
+    .footer-social {
+        justify-content: center;
+        margin-top: calc(var(--spacing-unit) * 1.875); /* 15px -> 1.875 * 8 = 15px */
+    }
+    .footer-social a {
+        margin: 0 calc(var(--spacing-unit) * 1.25); /* 10px -> 1.25 * 8 = 10px */
+    }
+
+    /* Header & Mockup */
+    .main-header {
+        padding: calc(var(--spacing-unit) * 1.25) 0; /* 10px -> 1.25 * 8 = 10px */
+    }
+    .main-header .logo img {
+        max-height: 35px;
+    }
+    .initial-preview-section {
+        padding: calc(var(--spacing-unit) * 2.5) 0; /* 20px -> 2.5 * 8 = 20px */
+    }
+    .initial-preview-section .product-mockup {
+        max-width: 250px;
+    }
+
+    /* Testimonials */
+    .testimonial .fa-quote-left {
+        font-size: 1.8em;
+    }
+    .testimonial p {
+        font-size: 0.9em;
+        padding-left: calc(var(--spacing-unit) * 3.75); /* 30px -> 3.75 * 8 = 30px */
+    }
+    .testimonial .author {
+        font-size: 0.9em;
+    }
+}
+/* ========================================= */
+/* --- STYLES DU HEADER (Logo, etc. - Centrage Corrigé) --- */
+/* ========================================= */
+.main-header {
+    padding: 20px 0;
+    background-color: var(--color-background-white); /* Utilise la couleur Chez Nous White */
+    border-bottom: 1px solid var(--color-border-light);
+    box-shadow: var(--shadow-light);
+}
+.main-header .container {
+    display: flex;
+    justify-content: center; /* Assure le centrage horizontal des éléments enfants */
+    align-items: center;
+    /* AJOUT : S'il y avait d'autres éléments invisibles qui poussaient le logo */
+    /* Cela assure que le logo est le seul élément principal dans le flex container si c'est le cas */
+    /* Sinon, cela ne changera rien si le logo est le seul enfant */
+    flex-grow: 0; 
+    flex-shrink: 0;
+    flex-basis: auto;
+}
+.main-header .logo {
+    /* Si le logo est le seul élément dans le conteneur flex et qu'il est déjà centré par le parent, */
+    /* ces règles peuvent sembler redondantes mais elles renforcent le centrage pour cet élément spécifique */
+    display: flex; /* Traite le div.logo comme un conteneur flex */
+    justify-content: center; /* Centre l'image à l'intérieur de div.logo */
+    align-items: center;
+    width: 100%; /* S'assure qu'il prend toute la largeur disponible pour être centré par son parent */
+}
+.main-header .logo img {
+    max-height: 50px;
+    width: auto;
+    /* AJOUT : Assure que l'image elle-même est un bloc et centrée si elle n'est pas le seul élément */
+    display: block;
+    margin: 0 auto;
+}
+
+/* --- MEDIA QUERIES : Header --- */
+@media (max-width: 768px) {
+    .main-header {
+        padding: 15px 0;
+    }
+    .main-header .logo img {
+        max-height: 40px;
+    }
+}
+@media (max-width: 480px) {
+    .main-header {
+        padding: 10px 0;
+    }
+    .main-header .logo img {
+        max-height: 35px;
+    }
+}
+
+/* ========================================= */
+/* --- SECTION D'APERÇU INITIAL (Mockup - Centrage Corrigé) --- */
+/* ========================================= */
+.initial-preview-section {
+    background-color: var(--color-background-secondary); /* VALIDÉ : Couleur de fond pour contraste */
+    padding: 50px 0;
+    text-align: center; /* Assure que le contenu inline (comme le texte de .section-intro) est centré */
+}
+.initial-preview-section .preview-content {
+    margin-bottom: 30px;
+}
+.initial-preview-section .product-mockup {
+    max-width: 400px;
+    height: auto;
+    display: block; /* Indispensable pour que margin: auto fonctionne pour le centrage horizontal */
+    margin: 0 auto; /* FIX: Centrage horizontal assuré pour l'image */
+    box-shadow: var(--shadow-medium);
+    border-radius: 10px;
+}
+
+/* --- MEDIA QUERIES : Header & Mockup --- */
+@media (max-width: 768px) {
+    /* ... (maintenir les styles header inchangés) ... */
+    .initial-preview-section {
+        padding: 30px 0;
+    }
+    .initial-preview-section .product-mockup {
+        max-width: 300px;
+    }
+}
+@media (max-width: 480px) {
+    /* ... (maintenir les styles header inchangés) ... */
+    .initial-preview-section {
+        padding: 20px 0;
+    }
+    .initial-preview-section .product-mockup {
+        max-width: 250px;
+    }
+}
+
+
+/* ========================================= */
+/* --- SECTION TÉMOIGNAGES --- */
+/* ========================================= */
+.testimonials-section {
+    background-color: var(--color-background-secondary); /* Nouvelle couleur de fond "Chez Nous" pour contraste */
+    padding: var(--padding-section);
+}
+.testimonials-section .icon-section {
+    color: var(--color-chez-nous-primary); /* Nouvelle couleur principale "Chez Nous" pour l'icône de section */
+}
+.testimonials-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: calc(var(--spacing-unit) * 3.75); /* Conversion en calc() pour cohérence (était 30px) */
+    margin-top: calc(var(--spacing-unit) * 6.25); /* Conversion en calc() pour cohérence (était 50px) */
+    margin-bottom: calc(var(--spacing-unit) * 6.25); /* Conversion en calc() pour cohérence (était 50px) */
+}
+.testimonial {
+    background-color: var(--color-background-card); /* Nouvelle couleur de fond "Chez Nous" pour les cartes */
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: var(--shadow-medium);
+    position: relative;
+    text-align: left;
+    border: 1px solid var(--color-border-light);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.testimonial:hover {
+    transform: translateY(calc(var(--spacing-unit) * -1)); /* Conversion en calc() pour cohérence (était -8px) */
+    box-shadow: var(--shadow-strong);
+}
+.testimonial .fa-quote-left {
+    font-size: 2.5em;
+    color: var(--color-chez-nous-accent); /* Nouvelle couleur d'accent "Chez Nous" pour les icônes de citation */
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    opacity: 0.2;
+}
+.testimonial p {
+    font-size: 1.05em; /* Taille inchangée */
+    color: var(--color-chez-nous-body-text); /* Nouvelle couleur de texte "Chez Nous" */
+    line-height: 1.7;
+    margin-bottom: 20px;
+    padding-left: 50px;
+    position: relative;
+}
+.testimonial p strong {
+    font-weight: 700;
+    color: var(--color-chez-nous-dark-text); /* Nouvelle couleur de titre "Chez Nous" pour le gras */
+}
+.testimonial .author {
+    font-size: 1em; /* Taille inchangée */
+    color: var(--color-chez-nous-light-text); /* Nouvelle couleur de texte clair "Chez Nous" */
+    font-style: italic;
+    text-align: right;
+    margin-top: 15px;
+}
+
+/* --- MEDIA QUERIES : Témoignages --- */
+@media (max-width: 992px) {
+    .testimonials-grid {
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: calc(var(--spacing-unit) * 3.125); /* Conversion en calc() (était 25px) */
+    }
+    .testimonial {
+        padding: 25px;
+    }
+    .testimonial .fa-quote-left {
+        font-size: 2.2em;
+        top: 15px;
+        left: 15px;
+    }
+    .testimonial p {
+        font-size: 1em; /* Taille inchangée */
+        padding-left: 40px;
+    }
+}
+@media (max-width: 768px) {
+    .testimonials-grid {
+        grid-template-columns: 1fr;
+        gap: calc(var(--spacing-unit) * 2.5); /* Conversion en calc() (était 20px) */
+    }
+    .testimonial {
+        padding: 20px;
+    }
+    .testimonial .fa-quote-left {
+        font-size: 2em;
+        top: 10px;
+        left: 10px;
+    }
+    .testimonial p {
+        font-size: 0.95em; /* Taille inchangée */
+        padding-left: 35px;
+    }
+}
+@media (max-width: 480px) {
+    .testimonial .fa-quote-left {
+        font-size: 1.8em;
+    }
+    .testimonial p {
+        font-size: 0.9em; /* Taille inchangée */
+        padding-left: 30px;
+    }
+    .testimonial .author {
+        font-size: 0.9em; /* Taille inchangée */
+    }
+}
+
+
+/* ========================================= */
+/* --- SECTION PACK COMPLET (TargetMax) - CORRIGÉE POUR L'AGENCEMENT ET COCHES --- */
+/* ========================================= */
+.offers-section {
+    background-color: var(--color-background-secondary); /* Nouvelle couleur de fond "Chez Nous" */
+    padding: calc(var(--spacing-unit) * 10) 0;
+    text-align: center;
+    color: var(--color-chez-nous-body-text);
+    position: relative;
+    overflow: hidden;
+}
+
+.offers-section .offers-section-main-icon {
+    font-size: 5.5rem; /* Taille inchangée */
+    color: var(--color-chez-nous-primary); /* Nouvelle couleur principale "Chez Nous" */
+    filter: drop-shadow(0 calc(var(--spacing-unit) * 0.5) calc(var(--spacing-unit) * 1) rgba(0, 0, 0, 0.1));
+    margin-bottom: calc(var(--spacing-unit) * 4);
+    display: block;
+}
+
+.offers-section h2 {
+    font-size: var(--font-size-xxxl); /* Taille inchangée */
+    color: var(--color-chez-nous-dark-text); /* Nouvelle couleur de titre "Chez Nous" */
+    line-height: 1.3;
+    margin-bottom: calc(var(--spacing-unit) * 3);
+    font-weight: 700;
+    font-family: var(--font-family-primary);
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.offers-section h2 .highlight-text-secondary {
+    /* CORRECTION CONTRASTE : Utilisation de la couleur de texte foncée pour un contraste maximal */
+    color: var(--color-chez-nous-dark-text); 
+    text-decoration: none; /* S'assurer qu'il n'y a pas de soulignement inattendu */
+}
+
+.offers-section .offers-intro-text {
+    font-size: var(--font-size-xxl); /* Taille inchangée */
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto calc(var(--spacing-unit) * 5) auto;
+    color: var(--color-chez-nous-light-text);
+    line-height: 1.6;
+}
+
+/* ----------------------------------------------------- */
+/* --- Compte à rebours OPTIMISÉ & PLUS PRO --- */
+/* ----------------------------------------------------- */
+.countdown-wrapper {
+    /* Ajustements pour une taille plus compacte et un look plus pro */
+    background-color: var(--color-background-card); /* Fond blanc pur */
+    border: 1px solid var(--color-border-light); /* Bordure légère pour la définition */
+    box-shadow: var(--shadow-light); /* Ombre très subtile */
+    padding: calc(var(--spacing-unit) * 2.5) calc(var(--spacing-unit) * 2); /* Padding réduit (était 4*8, 3*8) */
+    margin-bottom: calc(var(--spacing-unit) * 5); /* Marge inférieure ajustée */
+    border-radius: var(--border-radius-medium); /* Bords arrondis */
+    text-align: center;
+    color: var(--color-chez-nous-dark-text); /* Couleur de texte foncée par défaut */
+    max-width: 600px; /* Largeur maximale réduite pour un look plus compact */
+    margin-left: auto;
+    margin-right: auto;
+    position: relative;
+    overflow: hidden;
+    animation: none; /* Supprime l'animation de pulsation pour un look plus pro et moins "accentué" */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* @keyframes pulseGlow est maintenant inutile pour .countdown-wrapper si animation: none; */
+/* Mais nous le conservons dans le CSS global si d'autres éléments l'utilisent. */
+/* Le shadow sur 50% était: rgba(255, 165, 0, 0.6) */
+@keyframes pulseGlow {
+    0% {
+        box-shadow: var(--shadow-medium);
+    }
+    50% {
+        box-shadow: 0 10px 30px var(--color-chez-nous-primary-transparent); /* Utilisez la variable transparente pour une pulsation subtile */
+    }
+    100% {
+        box-shadow: var(--shadow-medium);
+    }
+}
+
+
+.countdown-message {
+    font-size: var(--font-size-medium); /* Taille réduite (était var(--font-size-xl)) */
+    font-weight: 700;
+    margin-bottom: calc(var(--spacing-unit) * 1.5); /* Espacement réduit */
+    color: var(--color-chez-nous-dark-text); /* Texte foncée pour la lisibilité */
+    text-shadow: none; /* Enlève l'ombre de texte pour un look plus propre */
+}
+
+.countdown-display {
+    display: flex;
+    justify-content: center;
+    gap: calc(var(--spacing-unit) * 2); /* Espacement réduit (était 2.5*8) */
+    margin-bottom: calc(var(--spacing-unit) * 1.5); /* Espacement réduit */
+    flex-wrap: wrap;
+}
+
+.countdown-segment {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: calc(var(--spacing-unit) * 0.8) calc(var(--spacing-unit) * 1.2); /* Padding interne réduit */
+    background-color: var(--color-background-highlight); /* Fond légèrement contrastant (jaune pâle) */
+    border-radius: var(--border-radius-small);
+    box-shadow: inset 0 0 calc(var(--spacing-unit) * 0.625) rgba(0, 0, 0, 0.05); /* Ombre intérieure plus légère */
+    min-width: 65px; /* Largeur minimale réduite pour les segments */
+}
+
+.countdown-digit {
+    font-size: 2.5rem; /* Taille réduite (était 3rem) */
+    font-weight: 900;
+    color: var(--color-chez-nous-primary); /* Couleur principale "Chez Nous" pour les chiffres */
+    text-shadow: none; /* Enlève l'ombre de texte */
+    line-height: 1.1; /* Ajusté */
+}
+
+.countdown-label {
+    font-size: var(--font-size-small); /* Taille inchangée */
+    color: var(--color-chez-nous-body-text); /* Couleur de texte "Chez Nous" */
+    font-weight: 600;
+    text-transform: uppercase;
+    margin-top: calc(var(--spacing-unit) * 0.5);
+    text-shadow: none; /* Enlève l'ombre de texte */
+}
+
+.countdown-note {
+    font-size: var(--font-size-small); /* Taille réduite (était var(--font-size-medium)) */
+    color: var(--color-chez-nous-light-text); /* Couleur de texte clair "Chez Nous" */
+    font-style: italic;
+    margin-top: calc(var(--spacing-unit) * 1);
+    text-shadow: none; /* Enlève l'ombre de texte */
+}
+
+/* --- Grille des Offres (Product Offers Grid) --- */
+.product-offers-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: calc(var(--spacing-unit) * 4);
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0 calc(var(--spacing-unit) * 2);
+    margin-bottom: calc(var(--spacing-unit) * 6);
+}
+
+.offer-card {
+    background-color: var(--color-background-card);
+    border-radius: var(--border-radius-medium);
+    box-shadow: var(--shadow-medium);
+    overflow: hidden;
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    display: flex;
+    flex-direction: column;
+    padding: calc(var(--spacing-unit) * 2.5); /* Padding ajusté */
+}
+
+.offer-card:hover {
+    transform: translateY(calc(var(--spacing-unit) * -1));
+    box-shadow: var(--shadow-strong);
+}
+
+.product-image-wrapper {
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--border-radius-small);
+    margin-bottom: calc(var(--spacing-unit) * 2.5); /* Marge ajustée */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 250px; /* Taille inchangée */
+}
+
+.product-image-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+}
+
+.offer-card h3 {
+    font-size: var(--font-size-h4);
+    color: var(--color-chez-nous-dark-text);
+    font-weight: 700;
+    margin-bottom: calc(var(--spacing-unit) * 1.5);
+}
+
+.offer-card ul {
+    list-style: none;
+    padding: 0;
+    margin-bottom: calc(var(--spacing-unit) * 3);
+}
+
+.offer-card li {
+    font-size: var(--font-size-medium);
+    color: var(--color-chez-nous-body-text);
+    margin-bottom: calc(var(--spacing-unit) * 1);
+    display: flex;
+    align-items: center;
+    gap: calc(var(--spacing-unit) * 0.8);
+}
+
+.offer-card li i {
+    color: var(--color-chez-nous-accent);
+    font-size: var(--font-size-xl);
+    filter: drop-shadow(0 calc(var(--spacing-unit) * 0.25) calc(var(--spacing-unit) * 0.25) rgba(0, 0, 0, 0.1));
+}
+
+.price-block {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: calc(var(--spacing-unit) * 3);
+    flex-wrap: wrap;
+    gap: calc(var(--spacing-unit) * 1);
+}
+
+.price-block .old-price {
+    font-size: var(--font-size-medium);
+    color: var(--color-chez-nous-light-text);
+    text-decoration: line-through;
+    margin-right: calc(var(--spacing-unit) * 1);
+}
+
+.price-block .price {
+    font-size: 2.5rem; /* Taille inchangée */
+    color: var(--color-chez-nous-primary);
+    font-weight: 900;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.15);
+}
+
+/* NOUVEAU : Style pour la note de petite monnaie (ex: "soit 2500 FCFA") */
+.price-block .small-currency-note {
+    font-size: 0.8em; /* Plus petit que le prix principal */
+    color: var(--color-chez-nous-body-text); /* Couleur de texte normale */
+    font-weight: 500;
+    margin-left: calc(var(--spacing-unit) * 0.5); /* Petit espacement après l'euro */
+}
+
+
+.price-block .discount-badge {
+    background: linear-gradient(45deg, var(--color-chez-nous-primary) 0%, var(--color-chez-nous-secondary) 100%);
+    color: var(--color-background-card);
+    padding: calc(var(--spacing-unit) * 0.8) calc(var(--spacing-unit) * 1.5);
+    border-radius: var(--border-radius-small);
+    font-size: var(--font-size-large);
+    font-weight: 900;
+    box-shadow: var(--shadow-medium);
+    transform: rotate(-3deg);
+    animation: badgePop 1s ease-out forwards;
+    transform-origin: bottom right;
+}
+
+/* @keyframes badgePop est défini globalement et utilise les nouvelles variables */
+
+.offer-card .cta-button.secondary-cta {
+    margin-top: auto;
+}
+
+.offers-section .offers-final-cta-text {
+    font-size: var(--font-size-large);
+    color: var(--color-chez-nous-dark-text);
+    margin-top: calc(var(--spacing-unit) * 6);
+    margin-bottom: calc(var(--spacing-unit) * 4);
+    text-align: center;
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.5;
+}
+
+/* --- MEDIA QUERIES SPÉCIFIQUES : Offers Section --- */
+
+@media (min-width: 992px) {
+    .offers-section h2 {
+        font-size: var(--font-size-h1);
+    }
+    .offers-section .offers-intro-text {
+        font-size: var(--font-size-xxl);
+    }
+    /* Compte à rebours sur desktop (ajustements de taille) */
+    .countdown-wrapper {
+        padding: calc(var(--spacing-unit) * 3) calc(var(--spacing-unit) * 4); /* Padding réduit sur desktop (était 5*8, 5*8) */
+        margin-bottom: calc(var(--spacing-unit) * 6); /* Marge ajustée */
+        max-width: 700px; /* Largeur max légèrement réduite pour compacité */
+    }
+    .countdown-display {
+        gap: calc(var(--spacing-unit) * 3); /* Espacement réduit (était 4*8) */
+    }
+    .countdown-segment {
+        min-width: 70px; /* Largeur minimale légèrement réduite */
+    }
+    .countdown-digit {
+        font-size: 4rem; /* Taille réduite (était 5rem) */
+    }
+    .countdown-label {
+        font-size: var(--font-size-medium); /* Taille ajustée */
+    }
+    .countdown-note {
+        font-size: var(--font-size-medium); /* Taille ajustée */
+    }
+    .price-block .price {
+        font-size: 3rem;
+    }
+}
+
+/* Tablette (768px - 991px) */
+@media (min-width: 768px) and (max-width: 991px) {
+    .offers-section {
+        padding: calc(var(--spacing-unit) * 8) 0;
+    }
+    .offers-section .offers-section-main-icon {
+        font-size: 4.5rem;
+    }
+    .offers-section h2 {
+        font-size: var(--font-size-h3);
+    }
+    .offers-section .offers-intro-text {
+        font-size: var(--font-size-xl);
+    }
+    /* Compte à rebours sur tablette (ajustements de taille) */
+    .countdown-wrapper {
+        padding: calc(var(--spacing-unit) * 2.5) calc(var(--spacing-unit) * 2.5); /* Padding réduit (était 3*8, 2*8) */
+        margin-bottom: calc(var(--spacing-unit) * 4); /* Marge ajustée */
+        max-width: 550px; /* Largeur max réduite */
+    }
+    .countdown-display {
+        gap: calc(var(--spacing-unit) * 1.5); /* Espacement réduit */
+    }
+    .countdown-segment {
+        min-width: 55px; /* Largeur minimale réduite */
+    }
+    .countdown-digit {
+        font-size: 2.5rem; /* Taille réduite */
+    }
+    .countdown-label {
+        font-size: var(--font-size-small); /* Taille ajustée */
+    }
+    .countdown-note {
+        font-size: var(--font-size-small); /* Taille ajustée */
+    }
+    .product-offers-grid {
+        gap: calc(var(--spacing-unit) * 3);
+        margin-bottom: calc(var(--spacing-unit) * 5);
+    }
+    .offer-card {
+        padding: calc(var(--spacing-unit) * 1.5);
+    }
+    .offer-card h3 {
+        font-size: var(--font-size-h5);
+    }
+    .offer-card li {
+        font-size: var(--font-size-small);
+    }
+    .offer-card li i {
+        font-size: var(--font-size-large);
+    }
+    .price-block {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: calc(var(--spacing-unit) * 1.5);
+    }
+    .price-block .price {
+        font-size: 2.2rem; /* Taille ajustée */
+    }
+    .price-block .discount-badge {
+        font-size: var(--font-size-small);
+        padding: calc(var(--spacing-unit) * 0.5) calc(var(--spacing-unit) * 1);
+        transform: rotate(0deg);
+    }
+    .offers-section .offers-final-cta-text {
+        font-size: var(--font-size-medium);
+        margin-top: calc(var(--spacing-unit) * 4);
+    }
+}
+
+/* Mobile (max-width: 767px) */
+@media (max-width: 767px) {
+    .offers-section {
+        padding: var(--padding-section-mobile);
+    }
+    .offers-section .offers-section-main-icon {
+        font-size: 3.5rem;
+    }
+    .offers-section h2 {
+        font-size: var(--font-size-h4);
+    }
+    .offers-section .offers-intro-text {
+        font-size: var(--font-size-medium);
+    }
+    /* Compte à rebours sur mobile (ajustements de taille) */
+    .countdown-wrapper {
+        padding: calc(var(--spacing-unit) * 1.5) calc(var(--spacing-unit) * 1.5); /* Padding réduit */
+        margin-bottom: calc(var(--spacing-unit) * 3); /* Marge ajustée */
+        border-radius: var(--border-radius-medium);
+        max-width: 100%; /* Largeur max sur mobile */
+        flex-direction: column;
+    }
+    .countdown-display {
+        gap: calc(var(--spacing-unit) * 0.8); /* Espacement réduit */
+    }
+    .countdown-segment {
+        padding: calc(var(--spacing-unit) * 0.6) calc(var(--spacing-unit) * 1); /* Padding réduit */
+        min-width: unset;
+    }
+    .countdown-message {
+        font-size: var(--font-size-xsmall); /* Taille réduite */
+        margin-bottom: calc(var(--spacing-unit) * 1.5); /* Marge ajustée */
+    }
+    .countdown-digit {
+        font-size: 2rem; /* Taille réduite */
+    }
+    .countdown-label {
+        font-size: var(--font-size-xsmall);
+        margin-top: calc(var(--spacing-unit) * 0.25);
+    }
+    .countdown-note {
+        font-size: var(--font-size-xsmall); /* Taille réduite */
+    }
+    .product-offers-grid {
+        grid-template-columns: 1fr;
+        gap: calc(var(--spacing-unit) * 4);
+        margin-bottom: calc(var(--spacing-unit) * 5);
+    }
+    .offer-card {
+        padding: calc(var(--spacing-unit) * 1.5);
+    }
+    .offer-card h3 {
+        font-size: var(--font-size-h5);
+    }
+    .offer-card li {
+        font-size: var(--font-size-small);
+    }
+    .offer-card li i {
+        font-size: var(--font-size-medium);
+    }
+    .price-block {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: calc(var(--spacing-unit) * 1.5);
+    }
+    .price-block .price {
+        font-size: 1.8rem; /* Taille ajustée */
+    }
+    .price-block .discount-badge {
+        font-size: var(--font-size-xsmall); /* Taille réduite */
+        padding: calc(var(--spacing-unit) * 0.4) calc(var(--spacing-unit) * 0.8);
+        transform: rotate(0deg);
+    }
+    .offers-section .offers-final-cta-text {
+        font-size: var(--font-size-small); /* Taille réduite */
+        margin-top: calc(var(--spacing-unit) * 3);
+    }
+}
+/* -------------------------------------------------------------------------- */
+/* STYLE POUR LES LIGNES D'INFORMATION (GÉNÉRAL ET VARIANTE WARNING) */
+/* (Adapté pour Chez Nous, sans changer les tailles/structure) */
+/* -------------------------------------------------------------------------- */
+
+/* STYLES DE BASE POUR TOUTES LES DIV AVEC LA CLASSE .info-line */
+.info-line {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: calc(var(--spacing-unit) * 3.125) calc(var(--spacing-unit) * 5); /* Conversion en calc() (était 25px 40px) */
+    border-radius: 12px;
+    margin: calc(var(--spacing-unit) * 6.25) auto 0 auto; /* Conversion en calc() (était 50px) */
+    max-width: 800px;
+    font-size: 1.25em; /* Taille inchangée */
+    font-weight: 700;
+    text-align: center;
+    line-height: 1.4;
+    position: relative;
+    overflow: hidden;
+    color: var(--color-chez-nous-dark-text); /* Nouvelle couleur de texte "Chez Nous" */
+    background-color: var(--color-background-card); /* Nouvelle couleur de fond "Chez Nous" (blanc pur) */
+    border: 1px solid var(--color-border-light);
+    box-shadow: var(--shadow-medium);
+}
+
+/* STYLES DE BASE POUR LES ICÔNES À L'INTÉRIEUR DE .info-line */
+.info-line i {
+    margin-right: calc(var(--spacing-unit) * 2.5); /* Conversion en calc() (était 20px) */
+    font-size: 1.8em; /* Taille inchangée */
+    flex-shrink: 0;
+    color: var(--color-chez-nous-primary); /* Nouvelle couleur principale "Chez Nous" */
+}
+
+/* STYLES SPÉCIFIQUES POUR LA VARIANTE "WARNING" (AVEC LA CLASSE .warning) */
+.info-line.warning {
+    border-left: calc(var(--spacing-unit) * 1) solid var(--color-chez-nous-primary); /* Nouvelle couleur principale "Chez Nous" pour la bordure (était 8px) */
+    background-color: var(--color-background-warning); /* Conserve la couleur de fond d'avertissement */
+    box-shadow: 0 4px 15px var(--color-chez-nous-primary-transparent); /* Nouvelle ombre avec couleur "Chez Nous" transparente */
+    animation: pulseBorder 2s infinite ease-in-out;
+}
+
+/* Couleur de l'icône dans la ligne d'avertissement */
+.info-line.warning i {
+    color: var(--color-chez-nous-primary); /* Nouvelle couleur principale "Chez Nous" pour l'icône */
+}
+
+/* L'icône `fa-hourglass-half` n'est plus utilisée dans le HTML que nous avons adapté pour cette ligne. */
+/* Cette règle CSS est donc rendue obsolète si tu as suivi les dernières mises à jour HTML pour cette section. */
+/* Si tu l'utilises ailleurs, nous pourrons la réintégrer ou la modifier spécifiquement. */
+.info-line.warning .fas.fa-hourglass-half {
+    animation: spinHourglass 3s infinite linear;
+    display: inline-block;
+}
+
+/* Animation de pulsation pour l'ombre de la ligne WARNING SEULEMENT */
+@keyframes pulseBorder {
+    0% { box-shadow: 0 4px 15px var(--color-chez-nous-primary-transparent); } /* Nouvelle couleur "Chez Nous" transparente */
+    50% { box-shadow: 0 4px 25px rgba(255, 179, 71, 0.4); } /* Utilise une rgba concrète pour un effet plus prononcé */
+    100% { box-shadow: 0 4px 15px var(--color-chez-nous-primary-transparent); } /* Nouvelle couleur "Chez Nous" transparente */
+}
+
+/* --- MEDIA QUERIES pour les lignes d'information (Adaptation responsive) --- */
+@media (max-width: 768px) {
+    .info-line {
+        font-size: 1.1em; /* Taille inchangée */
+        padding: calc(var(--spacing-unit) * 2.5) calc(var(--spacing-unit) * 3.125); /* Conversion en calc() (était 20px 25px) */
+        margin-top: calc(var(--spacing-unit) * 5); /* Conversion en calc() (était 40px) */
+    }
+    .info-line i {
+        font-size: 1.5em; /* Taille inchangée */
+        margin-right: calc(var(--spacing-unit) * 1.875); /* Conversion en calc() (était 15px) */
+    }
+}
+
+@media (max-width: 480px) {
+    .info-line {
+        flex-direction: column;
+        font-size: 1em; /* Taille inchangée */
+        padding: calc(var(--spacing-unit) * 1.875) calc(var(--spacing-unit) * 2.5); /* Conversion en calc() (était 15px 20px) */
+        margin-top: calc(var(--spacing-unit) * 3.75); /* Conversion en calc() (était 30px) */
+    }
+    .info-line i {
+        margin-right: 0;
+        margin-bottom: calc(var(--spacing-unit) * 1.25); /* Conversion en calc() (était 10px) */
+        font-size: 1.6em; /* Taille inchangée */
+    }
+}
+
+/* ========================================= */
+/* --- SECTION FAQ --- */
+/* ========================================= */
+.faq-section {
+    background-color: var(--color-background-card); /* Nouvelle couleur de fond "Chez Nous" (blanc pur) */
+    padding: var(--padding-section);
+}
+
+.faq-section .icon-section {
+    color: var(--color-chez-nous-primary); /* Nouvelle couleur principale "Chez Nous" pour l'icône de section */
+}
+
+.faq-accordion-container {
+    max-width: 900px;
+    margin: calc(var(--spacing-unit) * 6.25) auto 0 auto; /* Conversion en calc() (était 50px) */
+    text-align: left;
+}
+
+.faq-item {
+    background-color: var(--color-background-primary); /* Conserve le fond crème clair "Chez Nous" pour chaque item */
+    border: 1px solid var(--color-border-light);
+    border-radius: 10px;
+    margin-bottom: calc(var(--spacing-unit) * 2.5); /* Conversion en calc() (était 20px) */
+    box-shadow: var(--shadow-light);
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.faq-item:hover {
+    box-shadow: var(--shadow-medium);
+}
+
+.accordion-toggle {
+    display: none;
+}
+
+.accordion-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: calc(var(--spacing-unit) * 2.5) calc(var(--spacing-unit) * 3.75); /* Conversion en calc() (était 20px 30px) */
+    font-size: 1.25em; /* Taille inchangée */
+    font-weight: 600;
+    color: var(--color-chez-nous-dark-text); /* Nouvelle couleur de titre "Chez Nous" */
+    background-color: var(--color-background-card); /* Nouvelle couleur de fond "Chez Nous" (blanc pur) pour l'entête */
+    cursor: pointer;
+    border-bottom: 1px solid var(--color-border-light);
+    transition: background-color 0.3s ease;
+}
+
+.accordion-header:hover {
+    background-color: var(--color-background-secondary); /* Nouvelle couleur de fond "Chez Nous" au survol */
+}
+
+.accordion-icon {
+    font-size: 0.9em; /* Taille inchangée */
+    color: var(--color-chez-nous-primary); /* Nouvelle couleur principale "Chez Nous" pour l'icône */
+    transition: transform 0.3s ease;
+}
+
+.accordion-toggle:checked + .accordion-header .accordion-icon {
+    transform: rotate(180deg);
+}
+
+.accordion-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease-out, padding 0.4s ease-out;
+    padding: 0 calc(var(--spacing-unit) * 3.75); /* Conversion en calc() (était 0 30px) */
+}
+
+.accordion-toggle:checked + .accordion-header + .accordion-content {
+    max-height: 1000px; /* **CORRECTION ICI : Augmentation de la hauteur maximale pour ne pas couper le contenu** */
+    padding: calc(var(--spacing-unit) * 2.5) calc(var(--spacing-unit) * 3.75); /* Conversion en calc() (était 20px 30px) */
+}
+
+.accordion-content p {
+    font-size: 1.05em; /* Taille inchangée */
+    color: var(--color-chez-nous-body-text); /* Nouvelle couleur de texte "Chez Nous" */
+    line-height: 1.7;
+}
+
+.accordion-content p strong {
+    color: var(--color-chez-nous-primary); /* Nouvelle couleur principale "Chez Nous" pour le texte fort */
+    font-weight: 700;
+}
+
+/* --- MEDIA QUERIES pour la section FAQ --- */
+@media (max-width: 992px) {
+    .faq-accordion-container {
+        margin-top: calc(var(--spacing-unit) * 5); /* Conversion en calc() (était 40px) */
+    }
+    .accordion-header {
+        font-size: 1.15em; /* Taille inchangée */
+        padding: calc(var(--spacing-unit) * 2.25) calc(var(--spacing-unit) * 3.125); /* Conversion en calc() (était 18px 25px) */
+    }
+    .accordion-content {
+        padding: 0 calc(var(--spacing-unit) * 3.125); /* Conversion en calc() (était 0 25px) */
+    }
+    .accordion-toggle:checked + .accordion-header + .accordion-content {
+        max-height: 1000px; /* Assurer que la correction s'applique aussi aux media queries */
+        padding: calc(var(--spacing-unit) * 1.875) calc(var(--spacing-unit) * 3.125); /* Conversion en calc() (était 15px 25px) */
+    }
+    .accordion-content p {
+        font-size: 1em; /* Taille inchangée */
+    }
+}
+
+@media (max-width: 768px) {
+    .faq-section {
+        padding: calc(var(--spacing-unit) * 7.5) 0; /* Conversion en calc() (était 60px 0) */
+    }
+    .faq-accordion-container {
+        margin-top: calc(var(--spacing-unit) * 3.75); /* Conversion en calc() (était 30px) */
+    }
+    .faq-item {
+        margin-bottom: calc(var(--spacing-unit) * 1.875); /* Conversion en calc() (était 15px) */
+    }
+    .accordion-header {
+        font-size: 1.05em; /* Taille inchangée */
+        padding: calc(var(--spacing-unit) * 1.875) calc(var(--spacing-unit) * 2.5); /* Conversion en calc() (était 15px 20px) */
+    }
+    .accordion-icon {
+        font-size: 0.8em; /* Taille inchangée */
+    }
+    .accordion-content {
+        padding: 0 calc(var(--spacing-unit) * 2.5); /* Conversion en calc() (était 0 20px) */
+    }
+    .accordion-toggle:checked + .accordion-header + .accordion-content {
+        max-height: 1000px; /* Assurer que la correction s'applique aussi aux media queries */
+        padding: calc(var(--spacing-unit) * 1.875) calc(var(--spacing-unit) * 2.5); /* Conversion en calc() (était 15px 20px) */
+    }
+    .accordion-content p {
+        font-size: 0.95em; /* Taille inchangée */
+    }
+}
+
+@media (max-width: 480px) {
+    .accordion-header {
+        font-size: 1em; /* Taille inchangée */
+        padding: calc(var(--spacing-unit) * 1.5) calc(var(--spacing-unit) * 1.875); /* Conversion en calc() (était 12px 15px) */
+    }
+    .accordion-content {
+        padding: 0 calc(var(--spacing-unit) * 1.875); /* Conversion en calc() (était 0 15px) */
+    }
+    .accordion-toggle:checked + .accordion-header + .accordion-content {
+        max-height: 1000px; /* Assurer que la correction s'applique aussi aux media queries */
+        padding: calc(var(--spacing-unit) * 1.5) calc(var(--spacing-unit) * 1.875); /* Conversion en calc() (était 12px 15px) */
+    }
+    .accordion-content p {
+        font-size: 0.9em; /* Taille inchangée */
+    }
+}
+
+
+/* ========================================= */
+/* --- SECTION PRIX --- */
+/* ========================================= */
+.final-cta-section {
+    /* CORRECTION CONTRASTE : FOND SOMBRE ET UNI POUR UNE LISIBILITÉ MAXIMALE DU TEXTE BLANC */
+    background: var(--color-chez-nous-dark-text); /* Utilise la couleur gris-bleu foncé pour un contraste élevé */
+    padding: calc(var(--spacing-unit) * 12) 0;
+    text-align: center;
+    color: var(--color-background-card); /* Texte blanc, utilise background-card */
+    position: relative;
+    overflow: hidden;
+}
+
+.final-cta-section .cta-main-icon {
+    font-size: 6rem; /* Taille inchangée */
+    color: var(--color-background-card); /* Icône blanche */
+    filter: drop-shadow(0 calc(var(--spacing-unit) * 0.625) calc(var(--spacing-unit) * 1.875) rgba(0, 0, 0, 0.3));
+    margin-bottom: calc(var(--spacing-unit) * 4);
+    display: block;
+}
+
+.final-cta-section h2 {
+    font-size: var(--font-size-h2); /* Taille inchangée */
+    color: var(--color-background-card); /* Titre blanc */
+    line-height: 1.3;
+    margin-bottom: calc(var(--spacing-unit) * 3);
+    font-weight: var(--font-weight-extra-bold);
+    font-family: var(--font-family-primary);
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.final-cta-section .cta-intro-text {
+    font-size: var(--font-size-large); /* Taille inchangée */
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto calc(var(--spacing-unit) * 5) auto;
+    color: rgba(255, 255, 255, 0.9); /* Conserve la transparence pour le blanc */
+    line-height: 1.7;
+}
+
+.cta-highlight-message {
+    background-color: rgba(255, 255, 255, 0.15);
+    border-radius: var(--border-radius-large);
+    padding: calc(var(--spacing-unit) * 2.5) calc(var(--spacing-unit) * 4);
+    max-width: 600px;
+    margin: 0 auto calc(var(--spacing-unit) * 6) auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: calc(var(--spacing-unit) * 2);
+    box-shadow: var(--shadow-small);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+}
+
+.cta-highlight-message .cta-highlight-icon {
+    font-size: 2.5rem; /* Taille inchangée */
+    color: var(--color-background-card); /* Icône blanche */
+}
+
+.cta-highlight-message p {
+    font-size: var(--font-size-xl); /* Taille inchangée */
+    font-weight: var(--font-weight-bold);
+    color: var(--color-background-card); /* Texte blanc */
+    line-height: 1.3;
+    margin: 0;
+}
+
+.cta-highlight-message strong {
+    color: var(--color-chez-nous-secondary); /* Nouvelle couleur secondaire "Chez Nous" (Or doux) */
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.final-cta-section .cta-button.main-cta.oversized-cta {
+    font-size: var(--font-size-h4); /* Taille inchangée */
+    padding: calc(var(--spacing-unit) * 3) calc(var(--spacing-unit) * 6);
+    border-radius: var(--border-radius-pill);
+    /* DÉGRADÉ DU BOUTON : Mettre en avant la couleur Chez Nous primaire/secondaire sur un fond sombre */
+    background: linear-gradient(90deg, var(--color-chez-nous-primary), var(--color-chez-nous-secondary));
+    color: var(--color-background-card); /* Texte blanc */
+    box-shadow: 0 calc(var(--spacing-unit) * 1) calc(var(--spacing-unit) * 3) rgba(0, 0, 0, 0.3);
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    margin-bottom: calc(var(--spacing-unit) * 6);
+    display: inline-block;
+    text-decoration: none;
+    font-weight: var(--font-weight-black);
+    animation: pulseCta 2s infinite ease-in-out;
+}
+
+.final-cta-section .cta-button.main-cta.oversized-cta:hover {
+    transform: translateY(calc(var(--spacing-unit) * -0.625)) scale(1.02);
+    box-shadow: 0 calc(var(--spacing-unit) * 1.5) calc(var(--spacing-unit) * 4.375) rgba(0, 0, 0, 0.4);
+    /* DÉGRADÉ DU BOUTON AU SURVOL : Inverser ou assombrir légèrement */
+    background: linear-gradient(90deg, var(--color-chez-nous-secondary), var(--color-chez-nous-primary));
+}
+
+.trust-indicators-final {
+    margin-top: calc(var(--spacing-unit) * 4);
+    margin-bottom: calc(var(--spacing-unit) * 5);
+}
+
+.trust-indicators-final p {
+    font-size: var(--font-size-large); /* Taille inchangée */
+    color: rgba(255, 255, 255, 0.8); /* Conserve la transparence pour le blanc */
+    margin-bottom: calc(var(--spacing-unit) * 2);
+}
+
+.trust-indicators-final .payment-icons i {
+    font-size: 3rem; /* Taille inchangée */
+    color: var(--color-background-card); /* Icônes blanches */
+    margin: 0 calc(var(--spacing-unit) * 1.5);
+    filter: drop-shadow(0 calc(var(--spacing-unit) * 0.25) calc(var(--spacing-unit) * 0.625) rgba(0, 0, 0, 0.2));
+}
+
+.contact-info-final {
+    margin-top: calc(var(--spacing-unit) * 5);
+    padding-top: calc(var(--spacing-unit) * 4);
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.contact-info-final p {
+    font-size: var(--font-size-base); /* Taille inchangée */
+    color: rgba(255, 255, 255, 0.7); /* Conserve la transparence pour le blanc */
+    margin-bottom: calc(var(--spacing-unit) * 1.5);
+}
+
+/* --- MEDIA QUERIES : Final CTA Section (AJUSTÉES) --- */
+@media (min-width: 992px) {
+    .final-cta-section {
+        padding: calc(var(--spacing-unit) * 15) 0;
+    }
+    .final-cta-section h2 {
+        font-size: var(--font-size-h1);
+    }
+    .cta-intro-text {
+        font-size: var(--font-size-xl);
+    }
+    .cta-highlight-message p {
+        font-size: var(--font-size-xxl);
+    }
+    .final-cta-section .cta-button.main-cta.oversized-cta {
+        font-size: var(--font-size-h2);
+    }
+    .trust-indicators-final p {
+        font-size: var(--font-size-xl);
+    }
+}
+
+@media (max-width: 991px) { /* Tablette */
+    .final-cta-section {
+        padding: calc(var(--spacing-unit) * 10) 0;
+    }
+    .final-cta-section h2 {
+        font-size: var(--font-size-h3);
+    }
+    .cta-intro-text {
+        font-size: var(--font-size-medium);
+    }
+    .cta-highlight-message p {
+        font-size: var(--font-size-large);
+    }
+    .final-cta-section .cta-button.main-cta.oversized-cta {
+        font-size: var(--font-size-h4);
+    }
+    .trust-indicators-final p {
+        font-size: var(--font-size-medium);
+    }
+}
+
+@media (max-width: 767px) { /* Mobile */
+    .final-cta-section {
+        padding: var(--padding-section-mobile);
+    }
+    .final-cta-section h2 {
+        font-size: var(--font-size-h4);
+    }
+    .cta-intro-text {
+        font-size: var(--font-size-small);
+    }
+    .cta-highlight-message p {
+        font-size: var(--font-size-small);
+    }
+    .final-cta-section .cta-button.main-cta.oversized-cta {
+        font-size: var(--font-size-large);
+    }
+    .trust-indicators-final p {
+        font-size: var(--font-size-xsmall);
+    }
+}
+
+
+/* ========================================= */
+/* SECTION GARANTIE (NOUVELLE STRUCTURE) */
+/* Ce bloc gère l'apparence de la section de garantie de 30 jours, */
+/* incluant les couleurs de fond, l'espacement, et le style des éléments internes. */
+/* ========================================= */
+.guarantee-section {
+    background-color: var(--color-background-primary); /* Conserve la couleur de fond primaire "Chez Nous" */
+    padding: var(--padding-section);
+    text-align: center;
+}
+
+.guarantee-section .icon-section {
+    color: var(--color-chez-nous-accent); /* Nouvelle couleur d'accent "Chez Nous" (vert) pour l'icône de section */
+    margin-bottom: calc(var(--spacing-unit) * 2.5); /* Conversion en calc() (était 20px) */
+}
+
+.guarantee-section .section-intro {
+    font-size: var(--font-size-large); /* Taille inchangée */
+    max-width: 800px;
+    margin: 0 auto calc(var(--spacing-unit) * 6.25) auto; /* Conversion en calc() (était 50px) */
+    color: var(--color-chez-nous-body-text); /* Nouvelle couleur de texte "Chez Nous" */
+}
+
+.guarantee-content-block {
+    background-color: var(--color-background-secondary); /* Nouvelle couleur de fond "Chez Nous" pour le bloc de contenu */
+    border: 1px solid var(--color-border-light);
+    border-radius: 15px;
+    box-shadow: var(--shadow-medium);
+    max-width: 800px;
+    margin: calc(var(--spacing-unit) * 6.25) auto 0 auto; /* Conversion en calc() (était 50px) */
+    padding: calc(var(--spacing-unit) * 5); /* Conversion en calc() (était 40px) */
+    text-align: center;
+}
+
+.guarantee-content-block .guarantee-icon-large {
+    font-size: 4em; /* Taille inchangée */
+    color: var(--color-chez-nous-accent); /* Nouvelle couleur d'accent "Chez Nous" (vert) pour la grande icône */
+    margin-bottom: calc(var(--spacing-unit) * 3.125); /* Conversion en calc() (était 25px) */
+}
+
+.guarantee-content-block h3 {
+    font-size: 2em; /* Taille inchangée */
+    color: var(--color-chez-nous-dark-text); /* Nouvelle couleur de titre "Chez Nous" */
+    margin-bottom: calc(var(--spacing-unit) * 2.5); /* Conversion en calc() (était 20px) */
+    font-weight: 700;
+}
+
+.guarantee-content-block p {
+    font-size: 1.1em; /* Taille inchangée */
+    color: var(--color-chez-nous-body-text); /* Nouvelle couleur de texte "Chez Nous" */
+    line-height: 1.7;
+    margin-bottom: calc(var(--spacing-unit) * 1.875); /* Conversion en calc() (était 15px) */
+}
+
+.guarantee-content-block p strong {
+    color: var(--color-chez-nous-primary); /* Nouvelle couleur principale "Chez Nous" pour le texte fort */
+    font-weight: 700;
+}
+
+.guarantee-content-block .guarantee-cta-text {
+    font-size: 1.2em; /* Taille inchangée */
+    color: var(--color-chez-nous-primary); /* Nouvelle couleur principale "Chez Nous" pour le texte CTA */
+    font-weight: 600;
+    margin-top: calc(var(--spacing-unit) * 3.125); /* Conversion en calc() (était 25px) */
+    margin-bottom: calc(var(--spacing-unit) * 3.125); /* Conversion en calc() (était 25px) */
+}
+
+.guarantee-section .guarantee-cta-message {
+    font-size: 1.15em; /* Taille inchangée */
+    color: var(--color-chez-nous-body-text); /* Nouvelle couleur de texte "Chez Nous" */
+    margin-top: calc(var(--spacing-unit) * 7.5); /* Conversion en calc() (était 60px) */
+    margin-bottom: calc(var(--spacing-unit) * 3.125); /* Conversion en calc() (était 25px) */
+    font-weight: 600;
+}
+
+.guarantee-section .cta-button {
+    margin-top: calc(var(--spacing-unit) * 5); /* Conversion en calc() (était 40px) */
+}
+
+/* ========================================= */
+/* MEDIA QUERIES pour la section Garantie (Adaptation responsive) */
+/* ========================================= */
+
+@media (max-width: 992px) {
+    .guarantee-content-block {
+        padding: calc(var(--spacing-unit) * 4.375); /* Conversion en calc() (était 35px) */
+    }
+    .guarantee-content-block .guarantee-icon-large {
+        font-size: 3.5em; /* Taille inchangée */
+        margin-bottom: calc(var(--spacing-unit) * 2.5); /* Conversion en calc() (était 20px) */
+    }
+    .guarantee-content-block h3 {
+        font-size: 1.8em; /* Taille inchangée */
+    }
+    .guarantee-content-block p {
+        font-size: 1.05em; /* Taille inchangée */
+    }
+    .guarantee-content-block .guarantee-cta-text {
+        font-size: 1.1em; /* Taille inchangée */
+    }
+}
+
+@media (max-width: 768px) {
+    .guarantee-section {
+        padding: calc(var(--spacing-unit) * 7.5) 0; /* Conversion en calc() (était 60px 0) */
+    }
+    .guarantee-content-block {
+        margin-top: calc(var(--spacing-unit) * 5); /* Conversion en calc() (était 40px) */
+        padding: calc(var(--spacing-unit) * 3.75); /* Conversion en calc() (était 30px) */
+    }
+    .guarantee-content-block .guarantee-icon-large {
+        font-size: 3em; /* Taille inchangée */
+        margin-bottom: calc(var(--spacing-unit) * 1.875); /* Conversion en calc() (était 15px) */
+    }
+    .guarantee-content-block h3 {
+        font-size: 1.6em; /* Taille inchangée */
+    }
+    .guarantee-content-block p {
+        font-size: 1em; /* Taille inchangée */
+    }
+    .guarantee-content-block .guarantee-cta-text {
+        font-size: 1.05em; /* Taille inchangée */
+    }
+}
+
+@media (max-width: 480px) {
+    .guarantee-content-block {
+        padding: calc(var(--spacing-unit) * 3.125); /* Conversion en calc() (était 25px) */
+    }
+    .guarantee-content-block .guarantee-icon-large {
+        font-size: 2.5em; /* Taille inchangée */
+    }
+    .guarantee-content-block h3 {
+        font-size: 1.4em; /* Taille inchangée */
+    }
+    .guarantee-content-block p {
+        font-size: 0.95em; /* Taille inchangée */
+    }
+    .guarantee-content-block .guarantee-cta-text {
+        font-size: 1em; /* Taille inchangée */
+    }
+}
+
+/* ========================================= */
+/* FOOTER : Styles recommandés et optimisés */
+/* ========================================= */
+footer {
+    /* Nouvelle palette de couleurs "Chez Nous" pour le fond du footer */
+    background: linear-gradient(to bottom, var(--color-background-primary) 0%, var(--color-background-secondary) 100%);
+    padding: calc(var(--spacing-unit) * 7.5) calc(var(--spacing-unit) * 2.5) calc(var(--spacing-unit) * 5);
+    font-family: var(--font-family-primary);
+    color: var(--color-chez-nous-body-text); /* Nouvelle couleur de texte "Chez Nous" */
+    text-align: center;
+}
+
+/* Conteneur principal du footer utilisant un système de grille. */
+.container.footer-grid-layout {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: calc(var(--spacing-unit) * 5);
+    max-width: 1200px;
+    margin: auto;
+}
+
+/* Alignement du texte pour chaque zone de contenu du footer (Marque, Navigation, Info). */
+.footer-brand-area,
+.footer-nav-area,
+.footer-info-area {
+    text-align: center;
+}
+
+/* Styles pour le logo dans le footer. */
+.footer-logo img {
+    max-width: 160px; /* Taille inchangée */
+    height: auto;
+    margin-bottom: calc(var(--spacing-unit) * 1.875);
+}
+
+/* Styles pour le slogan de la marque dans le footer. */
+.footer-slogan {
+    font-size: 15px; /* Taille inchangée */
+    color: var(--color-chez-nous-light-text); /* Nouvelle couleur de texte clair "Chez Nous" */
+    line-height: 1.6;
+    margin-bottom: calc(var(--spacing-unit) * 2.5);
+}
+
+/* Conteneur des icônes de réseaux sociaux. */
+.footer-social {
+    display: flex;
+    justify-content: center;
+    gap: calc(var(--spacing-unit) * 2.5);
+}
+
+/* Styles pour les liens d'icônes de réseaux sociaux. */
+.footer-social a {
+    display: inline-block;
+    font-size: 18px; /* Taille inchangée */
+    color: var(--color-chez-nous-primary); /* Nouvelle couleur principale "Chez Nous" */
+    transition: transform 0.3s ease;
+}
+
+/* Effet au survol des icônes de réseaux sociaux. */
+.footer-social a:hover {
+    color: var(--color-chez-nous-secondary); /* Nouvelle couleur secondaire "Chez Nous" au survol */
+    transform: scale(1.2);
+}
+
+/* Styles pour les titres des sections (Ex: "Explorer", "Contact & Info"). */
+.footer-nav-area h4,
+.footer-info-area h4 {
+    font-size: 17px; /* Taille inchangée */
+    margin-bottom: calc(var(--spacing-unit) * 1.875);
+    color: var(--color-chez-nous-dark-text); /* Nouvelle couleur de titre "Chez Nous" */
+}
+
+/* Styles de base pour les listes de liens (navigation et informations). */
+.footer-links,
+.footer-info-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+/* Espacement entre les éléments de liste individuels. */
+.footer-links li,
+.footer-info-list li {
+    margin-bottom: calc(var(--spacing-unit) * 1.25);
+}
+
+/* Styles pour tous les liens à l'intérieur des listes de navigation et d'information. */
+.footer-links a,
+.footer-info-list a {
+    color: var(--color-chez-nous-body-text); /* Nouvelle couleur de texte "Chez Nous" */
+    text-decoration: none;
+    font-size: 15px; /* Taille inchangée */
+    transition: color 0.3s ease;
+}
+
+/* Effet au survol des liens. */
+.footer-links a:hover,
+.footer-info-list a:hover {
+    color: var(--color-chez-nous-primary); /* Nouvelle couleur principale "Chez Nous" au survol */
+}
+
+/* Styles spécifiques pour le lien e-mail. */
+.footer-info-list a[href^="mailto:"] {
+    font-weight: 500;
+    color: var(--color-chez-nous-dark-text); /* Nouvelle couleur de titre "Chez Nous" */
+}
+
+/* Styles pour le paragraphe de copyright. */
+.footer-copyright {
+    font-size: 13px; /* Taille inchangée */
+    color: var(--color-chez-nous-light-text); /* Nouvelle couleur de texte clair "Chez Nous" */
+    margin-top: calc(var(--spacing-unit) * 2.5);
+    text-align: center;
+}
