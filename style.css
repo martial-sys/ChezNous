@@ -538,7 +538,7 @@ section h2::after {
     background-color: var(--color-background-card); /* Nouvelle couleur de fond "Chez Nous" pour les cartes */
     padding: calc(var(--spacing-unit) * 3.75);
     border-radius: 10px;
-    box-shadow: var(--shadow-medium);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08); /* OMBRE ADOUCIE (était var(--shadow-medium)) */
     text-align: center;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     border: 1px solid var(--color-border-light);
@@ -546,7 +546,7 @@ section h2::after {
 
 .scenario-item:hover {
     transform: translateY(calc(var(--spacing-unit) * -1));
-    box-shadow: var(--shadow-strong);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12); /* OMBRE DE HOVER ADOUCIE (était var(--shadow-strong)) */
 }
 
 .scenario-item .scenario-icon {
@@ -578,7 +578,6 @@ section h2::after {
     margin-right: auto;
     line-height: 1.5;
 }
-
 /* ========================================= */
 /* --- SECTION SOLUTION (AVANTAGES) --- */
 /* ========================================= */
@@ -595,14 +594,14 @@ section h2::after {
     background-color: var(--color-background-card); /* Nouvelle couleur de fond "Chez Nous" pour les cartes */
     padding: calc(var(--spacing-unit) * 3.75);
     border-radius: 10px;
-    box-shadow: var(--shadow-medium);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06); /* OMBRE ADOUCIE (était var(--shadow-medium)) */
     text-align: left;
     border: 1px solid var(--color-border-light);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 .solution-item:hover {
     transform: translateY(calc(var(--spacing-unit) * -1));
-    box-shadow: var(--shadow-strong);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1); /* OMBRE DE HOVER ADOUCIE (était var(--shadow-strong)) */
 }
 .solution-item h3 {
     font-size: 1.6em; /* Taille inchangée */
@@ -623,12 +622,11 @@ section h2::after {
     line-height: 1.6;
 }
 
-
 /* ========================================= */
 /* --- SECTION CONTENU / THÈMES --- */
 /* ========================================= */
 .content-section {
-    background-color: var(--color-background-soft); /* Conserve la couleur de fond actuelle */
+    background-color: var(--color-background-secondary); /* Nouvelle couleur de fond "Chez Nous" pour contraste */
 }
 .content-section .icon-section {
     color: var(--color-chez-nous-primary); /* Nouvelle couleur principale "Chez Nous" pour l'icône de section */
@@ -644,14 +642,14 @@ section h2::after {
     background-color: var(--color-background-card); /* Nouvelle couleur de fond "Chez Nous" pour les cartes */
     padding: calc(var(--spacing-unit) * 3.75);
     border-radius: 10px;
-    box-shadow: var(--shadow-medium);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06); /* OMBRE ADOUCIE (était var(--shadow-medium)) */
     text-align: center;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     border: 1px solid var(--color-border-light);
 }
 .theme-item:hover {
     transform: translateY(calc(var(--spacing-unit) * -1));
-    box-shadow: var(--shadow-strong);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1); /* OMBRE DE HOVER ADOUCIE (était var(--shadow-strong)) */
 }
 .theme-item .theme-icon {
     font-size: 3.5em; /* Taille inchangée */
@@ -692,7 +690,7 @@ section h2::after {
     border-left: 5px solid var(--color-chez-nous-primary); /* Nouvelle couleur principale "Chez Nous" pour la bordure */
     padding: calc(var(--spacing-unit) * 5);
     border-radius: 15px;
-    box-shadow: var(--shadow-medium);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06); /* OMBRE ADOUCIE (était var(--shadow-medium)) */
     max-width: 850px;
     margin: 0 auto calc(var(--spacing-unit) * 5) auto;
     text-align: left;
@@ -709,7 +707,7 @@ section h2::after {
 }
 .aisha-story-section .story-lesson-text {
     font-size: 1.3em; /* Taille inchangée */
-    font-weight: 500;
+    font-weight: 600; /* Recommandation: était 500 */
     color: var(--color-chez-nous-dark-text); /* Nouvelle couleur de texte foncée "Chez Nous" pour la leçon */
     max-width: 900px;
     margin: 0 auto;
@@ -1131,31 +1129,25 @@ section h2::after {
     padding: 20px 0;
     background-color: var(--color-background-white); /* Utilise la couleur Chez Nous White */
     border-bottom: 1px solid var(--color-border-light);
-    box-shadow: var(--shadow-light);
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.05); /* OMBRE ADOUCIE (était var(--shadow-light)) */
 }
 .main-header .container {
     display: flex;
     justify-content: center; /* Assure le centrage horizontal des éléments enfants */
     align-items: center;
-    /* AJOUT : S'il y avait d'autres éléments invisibles qui poussaient le logo */
-    /* Cela assure que le logo est le seul élément principal dans le flex container si c'est le cas */
-    /* Sinon, cela ne changera rien si le logo est le seul enfant */
     flex-grow: 0; 
     flex-shrink: 0;
     flex-basis: auto;
 }
 .main-header .logo {
-    /* Si le logo est le seul élément dans le conteneur flex et qu'il est déjà centré par le parent, */
-    /* ces règles peuvent sembler redondantes mais elles renforcent le centrage pour cet élément spécifique */
-    display: flex; /* Traite le div.logo comme un conteneur flex */
-    justify-content: center; /* Centre l'image à l'intérieur de div.logo */
+    display: flex;
+    justify-content: center;
     align-items: center;
-    width: 100%; /* S'assure qu'il prend toute la largeur disponible pour être centré par son parent */
+    width: 100%;
 }
 .main-header .logo img {
     max-height: 50px;
     width: auto;
-    /* AJOUT : Assure que l'image elle-même est un bloc et centrée si elle n'est pas le seul élément */
     display: block;
     margin: 0 auto;
 }
@@ -1182,9 +1174,9 @@ section h2::after {
 /* --- SECTION D'APERÇU INITIAL (Mockup - Centrage Corrigé) --- */
 /* ========================================= */
 .initial-preview-section {
-    background-color: var(--color-background-secondary); /* VALIDÉ : Couleur de fond pour contraste */
+    background-color: var(--color-background-secondary); /* Couleur de fond pour contraste */
     padding: 50px 0;
-    text-align: center; /* Assure que le contenu inline (comme le texte de .section-intro) est centré */
+    text-align: center;
 }
 .initial-preview-section .preview-content {
     margin-bottom: 30px;
@@ -1192,10 +1184,16 @@ section h2::after {
 .initial-preview-section .product-mockup {
     max-width: 400px;
     height: auto;
-    display: block; /* Indispensable pour que margin: auto fonctionne pour le centrage horizontal */
-    margin: 0 auto; /* FIX: Centrage horizontal assuré pour l'image */
-    box-shadow: var(--shadow-medium);
+    display: block;
+    margin: 0 auto;
+    box-shadow: var(--shadow-light); /* ADOUCI : Utilise shadow-light */
     border-radius: 10px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.initial-preview-section .product-mockup:hover {
+    transform: translateY(-5px); /* Remonte un peu plus au survol */
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15); /* OMBRE DE HOVER ADOUCIE */
 }
 
 /* --- MEDIA QUERIES : Header & Mockup --- */
@@ -1217,8 +1215,6 @@ section h2::after {
         max-width: 250px;
     }
 }
-
-
 /* ========================================= */
 /* --- SECTION TÉMOIGNAGES --- */
 /* ========================================= */
@@ -1232,23 +1228,23 @@ section h2::after {
 .testimonials-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: calc(var(--spacing-unit) * 3.75); /* Conversion en calc() pour cohérence (était 30px) */
-    margin-top: calc(var(--spacing-unit) * 6.25); /* Conversion en calc() pour cohérence (était 50px) */
-    margin-bottom: calc(var(--spacing-unit) * 6.25); /* Conversion en calc() pour cohérence (était 50px) */
+    gap: calc(var(--spacing-unit) * 3.75);
+    margin-top: calc(var(--spacing-unit) * 6.25);
+    margin-bottom: calc(var(--spacing-unit) * 6.25);
 }
 .testimonial {
     background-color: var(--color-background-card); /* Nouvelle couleur de fond "Chez Nous" pour les cartes */
     padding: 30px;
     border-radius: 10px;
-    box-shadow: var(--shadow-medium);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06); /* OMBRE ADOUCIE (était var(--shadow-medium)) */
     position: relative;
     text-align: left;
     border: 1px solid var(--color-border-light);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 .testimonial:hover {
-    transform: translateY(calc(var(--spacing-unit) * -1)); /* Conversion en calc() pour cohérence (était -8px) */
-    box-shadow: var(--shadow-strong);
+    transform: translateY(calc(var(--spacing-unit) * -1));
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1); /* OMBRE DE HOVER ADOUCIE (était var(--shadow-strong)) */
 }
 .testimonial .fa-quote-left {
     font-size: 2.5em;
@@ -1282,7 +1278,7 @@ section h2::after {
 @media (max-width: 992px) {
     .testimonials-grid {
         grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-        gap: calc(var(--spacing-unit) * 3.125); /* Conversion en calc() (était 25px) */
+        gap: calc(var(--spacing-unit) * 3.125);
     }
     .testimonial {
         padding: 25px;
@@ -1293,14 +1289,14 @@ section h2::after {
         left: 15px;
     }
     .testimonial p {
-        font-size: 1em; /* Taille inchangée */
+        font-size: 1em;
         padding-left: 40px;
     }
 }
 @media (max-width: 768px) {
     .testimonials-grid {
         grid-template-columns: 1fr;
-        gap: calc(var(--spacing-unit) * 2.5); /* Conversion en calc() (était 20px) */
+        gap: calc(var(--spacing-unit) * 2.5);
     }
     .testimonial {
         padding: 20px;
@@ -1311,7 +1307,7 @@ section h2::after {
         left: 10px;
     }
     .testimonial p {
-        font-size: 0.95em; /* Taille inchangée */
+        font-size: 0.95em;
         padding-left: 35px;
     }
 }
@@ -1320,14 +1316,13 @@ section h2::after {
         font-size: 1.8em;
     }
     .testimonial p {
-        font-size: 0.9em; /* Taille inchangée */
+        font-size: 0.9em;
         padding-left: 30px;
     }
     .testimonial .author {
-        font-size: 0.9em; /* Taille inchangée */
+        font-size: 0.9em;
     }
 }
-
 
 /* ========================================= */
 /* --- SECTION PACK COMPLET (TargetMax) - CORRIGÉE POUR L'AGENCEMENT ET COCHES --- */
@@ -1363,9 +1358,8 @@ section h2::after {
 }
 
 .offers-section h2 .highlight-text-secondary {
-    /* CORRECTION CONTRASTE : Utilisation de la couleur de texte foncée pour un contraste maximal */
     color: var(--color-chez-nous-dark-text); 
-    text-decoration: none; /* S'assurer qu'il n'y a pas de soulignement inattendu */
+    text-decoration: none;
 }
 
 .offers-section .offers-intro-text {
@@ -1381,35 +1375,31 @@ section h2::after {
 /* --- Compte à rebours OPTIMISÉ & PLUS PRO --- */
 /* ----------------------------------------------------- */
 .countdown-wrapper {
-    /* Ajustements pour une taille plus compacte et un look plus pro */
-    background-color: var(--color-background-card); /* Fond blanc pur */
-    border: 1px solid var(--color-border-light); /* Bordure légère pour la définition */
-    box-shadow: var(--shadow-light); /* Ombre très subtile */
-    padding: calc(var(--spacing-unit) * 2.5) calc(var(--spacing-unit) * 2); /* Padding réduit (était 4*8, 3*8) */
-    margin-bottom: calc(var(--spacing-unit) * 5); /* Marge inférieure ajustée */
-    border-radius: var(--border-radius-medium); /* Bords arrondis */
+    background-color: var(--color-background-card);
+    border: 1px solid var(--color-border-light);
+    box-shadow: var(--shadow-light);
+    padding: calc(var(--spacing-unit) * 2.5) calc(var(--spacing-unit) * 2);
+    margin-bottom: calc(var(--spacing-unit) * 5);
+    border-radius: var(--border-radius-medium);
     text-align: center;
-    color: var(--color-chez-nous-dark-text); /* Couleur de texte foncée par défaut */
-    max-width: 600px; /* Largeur maximale réduite pour un look plus compact */
+    color: var(--color-chez-nous-dark-text);
+    max-width: 600px;
     margin-left: auto;
     margin-right: auto;
     position: relative;
     overflow: hidden;
-    animation: none; /* Supprime l'animation de pulsation pour un look plus pro et moins "accentué" */
+    animation: none;
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
-/* @keyframes pulseGlow est maintenant inutile pour .countdown-wrapper si animation: none; */
-/* Mais nous le conservons dans le CSS global si d'autres éléments l'utilisent. */
-/* Le shadow sur 50% était: rgba(255, 165, 0, 0.6) */
 @keyframes pulseGlow {
     0% {
         box-shadow: var(--shadow-medium);
     }
     50% {
-        box-shadow: 0 10px 30px var(--color-chez-nous-primary-transparent); /* Utilisez la variable transparente pour une pulsation subtile */
+        box-shadow: 0 calc(var(--spacing-unit) * 1.25) calc(var(--spacing-unit) * 3.75) var(--color-chez-nous-primary-transparent);
     }
     100% {
         box-shadow: var(--shadow-medium);
@@ -1418,18 +1408,18 @@ section h2::after {
 
 
 .countdown-message {
-    font-size: var(--font-size-medium); /* Taille réduite (était var(--font-size-xl)) */
+    font-size: var(--font-size-medium);
     font-weight: 700;
-    margin-bottom: calc(var(--spacing-unit) * 1.5); /* Espacement réduit */
-    color: var(--color-chez-nous-dark-text); /* Texte foncée pour la lisibilité */
-    text-shadow: none; /* Enlève l'ombre de texte pour un look plus propre */
+    margin-bottom: calc(var(--spacing-unit) * 1.5);
+    color: var(--color-chez-nous-dark-text);
+    text-shadow: none;
 }
 
 .countdown-display {
     display: flex;
     justify-content: center;
-    gap: calc(var(--spacing-unit) * 2); /* Espacement réduit (était 2.5*8) */
-    margin-bottom: calc(var(--spacing-unit) * 1.5); /* Espacement réduit */
+    gap: calc(var(--spacing-unit) * 2);
+    margin-bottom: calc(var(--spacing-unit) * 1.5);
     flex-wrap: wrap;
 }
 
@@ -1437,39 +1427,41 @@ section h2::after {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: calc(var(--spacing-unit) * 0.8) calc(var(--spacing-unit) * 1.2); /* Padding interne réduit */
-    background-color: var(--color-background-highlight); /* Fond légèrement contrastant (jaune pâle) */
+    padding: calc(var(--spacing-unit) * 0.8) calc(var(--spacing-unit) * 1.2);
+    background-color: var(--color-background-highlight);
     border-radius: var(--border-radius-small);
-    box-shadow: inset 0 0 calc(var(--spacing-unit) * 0.625) rgba(0, 0, 0, 0.05); /* Ombre intérieure plus légère */
-    min-width: 65px; /* Largeur minimale réduite pour les segments */
+    box-shadow: inset 0 0 calc(var(--spacing-unit) * 0.625) rgba(0, 0, 0, 0.05);
+    min-width: 65px;
 }
 
 .countdown-digit {
-    font-size: 2.5rem; /* Taille réduite (était 3rem) */
+    font-size: 2.5rem;
     font-weight: 900;
-    color: var(--color-chez-nous-primary); /* Couleur principale "Chez Nous" pour les chiffres */
-    text-shadow: none; /* Enlève l'ombre de texte */
-    line-height: 1.1; /* Ajusté */
+    color: var(--color-chez-nous-primary);
+    text-shadow: none;
+    line-height: 1.1;
 }
 
 .countdown-label {
-    font-size: var(--font-size-small); /* Taille inchangée */
-    color: var(--color-chez-nous-body-text); /* Couleur de texte "Chez Nous" */
+    font-size: var(--font-size-small);
+    color: var(--color-chez-nous-body-text);
     font-weight: 600;
     text-transform: uppercase;
     margin-top: calc(var(--spacing-unit) * 0.5);
-    text-shadow: none; /* Enlève l'ombre de texte */
+    text-shadow: none;
 }
 
 .countdown-note {
-    font-size: var(--font-size-small); /* Taille réduite (était var(--font-size-medium)) */
-    color: var(--color-chez-nous-light-text); /* Couleur de texte clair "Chez Nous" */
+    font-size: var(--font-size-small);
+    color: var(--color-chez-nous-light-text);
     font-style: italic;
     margin-top: calc(var(--spacing-unit) * 1);
-    text-shadow: none; /* Enlève l'ombre de texte */
+    text-shadow: none;
 }
 
+/* ========================================= */
 /* --- Grille des Offres (Product Offers Grid) --- */
+/* ========================================= */
 .product-offers-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -1489,7 +1481,7 @@ section h2::after {
     transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
     display: flex;
     flex-direction: column;
-    padding: calc(var(--spacing-unit) * 2.5); /* Padding ajusté */
+    padding: calc(var(--spacing-unit) * 2.5);
 }
 
 .offer-card:hover {
@@ -1501,17 +1493,17 @@ section h2::after {
     position: relative;
     overflow: hidden;
     border-radius: var(--border-radius-small);
-    margin-bottom: calc(var(--spacing-unit) * 2.5); /* Marge ajustée */
+    margin-bottom: calc(var(--spacing-unit) * 2.5);
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 250px; /* Taille inchangée */
+    height: 450px; /* CORRECTION CLÉ : Hauteur adaptée pour les images 9:16 (était 250px) */
 }
 
 .product-image-wrapper img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
+    width: 100%; /* Important pour que l'image prenne toute la largeur disponible */
+    height: 100%; /* Important pour que l'image prenne toute la hauteur disponible */
+    object-fit: contain; /* Conserver 'contain' pour ne pas couper l'image */
     display: block;
 }
 
@@ -1560,20 +1552,18 @@ section h2::after {
 }
 
 .price-block .price {
-    font-size: 2.5rem; /* Taille inchangée */
+    font-size: 2.5rem;
     color: var(--color-chez-nous-primary);
     font-weight: 900;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.15);
 }
 
-/* NOUVEAU : Style pour la note de petite monnaie (ex: "soit 2500 FCFA") */
 .price-block .small-currency-note {
-    font-size: 0.8em; /* Plus petit que le prix principal */
-    color: var(--color-chez-nous-body-text); /* Couleur de texte normale */
+    font-size: 0.8em;
+    color: var(--color-chez-nous-body-text);
     font-weight: 500;
-    margin-left: calc(var(--spacing-unit) * 0.5); /* Petit espacement après l'euro */
+    margin-left: calc(var(--spacing-unit) * 0.5);
 }
-
 
 .price-block .discount-badge {
     background: linear-gradient(45deg, var(--color-chez-nous-primary) 0%, var(--color-chez-nous-secondary) 100%);
@@ -1588,7 +1578,20 @@ section h2::after {
     transform-origin: bottom right;
 }
 
-/* @keyframes badgePop est défini globalement et utilise les nouvelles variables */
+@keyframes badgePop {
+    0% {
+        transform: scale(0) rotate(0deg);
+        opacity: 0;
+    }
+    70% {
+        transform: scale(1.1) rotate(-5deg);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(1) rotate(-3deg);
+    }
+}
+
 
 .offer-card .cta-button.secondary-cta {
     margin-top: auto;
@@ -1617,24 +1620,24 @@ section h2::after {
     }
     /* Compte à rebours sur desktop (ajustements de taille) */
     .countdown-wrapper {
-        padding: calc(var(--spacing-unit) * 3) calc(var(--spacing-unit) * 4); /* Padding réduit sur desktop (était 5*8, 5*8) */
-        margin-bottom: calc(var(--spacing-unit) * 6); /* Marge ajustée */
-        max-width: 700px; /* Largeur max légèrement réduite pour compacité */
+        padding: calc(var(--spacing-unit) * 3) calc(var(--spacing-unit) * 4);
+        margin-bottom: calc(var(--spacing-unit) * 6);
+        max-width: 700px;
     }
     .countdown-display {
-        gap: calc(var(--spacing-unit) * 3); /* Espacement réduit (était 4*8) */
+        gap: calc(var(--spacing-unit) * 3);
     }
     .countdown-segment {
-        min-width: 70px; /* Largeur minimale légèrement réduite */
+        min-width: 70px;
     }
     .countdown-digit {
-        font-size: 4rem; /* Taille réduite (était 5rem) */
+        font-size: 4rem;
     }
     .countdown-label {
-        font-size: var(--font-size-medium); /* Taille ajustée */
+        font-size: var(--font-size-medium);
     }
     .countdown-note {
-        font-size: var(--font-size-medium); /* Taille ajustée */
+        font-size: var(--font-size-medium);
     }
     .price-block .price {
         font-size: 3rem;
@@ -1657,24 +1660,24 @@ section h2::after {
     }
     /* Compte à rebours sur tablette (ajustements de taille) */
     .countdown-wrapper {
-        padding: calc(var(--spacing-unit) * 2.5) calc(var(--spacing-unit) * 2.5); /* Padding réduit (était 3*8, 2*8) */
-        margin-bottom: calc(var(--spacing-unit) * 4); /* Marge ajustée */
-        max-width: 550px; /* Largeur max réduite */
+        padding: calc(var(--spacing-unit) * 2.5) calc(var(--spacing-unit) * 2.5);
+        margin-bottom: calc(var(--spacing-unit) * 4);
+        max-width: 550px;
     }
     .countdown-display {
-        gap: calc(var(--spacing-unit) * 1.5); /* Espacement réduit */
+        gap: calc(var(--spacing-unit) * 1.5);
     }
     .countdown-segment {
-        min-width: 55px; /* Largeur minimale réduite */
+        min-width: 55px;
     }
     .countdown-digit {
-        font-size: 2.5rem; /* Taille réduite */
+        font-size: 2.5rem;
     }
     .countdown-label {
-        font-size: var(--font-size-small); /* Taille ajustée */
+        font-size: var(--font-size-small);
     }
     .countdown-note {
-        font-size: var(--font-size-small); /* Taille ajustée */
+        font-size: var(--font-size-small);
     }
     .product-offers-grid {
         gap: calc(var(--spacing-unit) * 3);
@@ -1698,7 +1701,7 @@ section h2::after {
         gap: calc(var(--spacing-unit) * 1.5);
     }
     .price-block .price {
-        font-size: 2.2rem; /* Taille ajustée */
+        font-size: 2.2rem;
     }
     .price-block .discount-badge {
         font-size: var(--font-size-small);
@@ -1727,32 +1730,32 @@ section h2::after {
     }
     /* Compte à rebours sur mobile (ajustements de taille) */
     .countdown-wrapper {
-        padding: calc(var(--spacing-unit) * 1.5) calc(var(--spacing-unit) * 1.5); /* Padding réduit */
-        margin-bottom: calc(var(--spacing-unit) * 3); /* Marge ajustée */
+        padding: calc(var(--spacing-unit) * 1.5) calc(var(--spacing-unit) * 1.5);
+        margin-bottom: calc(var(--spacing-unit) * 3);
         border-radius: var(--border-radius-medium);
-        max-width: 100%; /* Largeur max sur mobile */
+        max-width: 100%;
         flex-direction: column;
     }
     .countdown-display {
-        gap: calc(var(--spacing-unit) * 0.8); /* Espacement réduit */
+        gap: calc(var(--spacing-unit) * 0.8);
     }
     .countdown-segment {
-        padding: calc(var(--spacing-unit) * 0.6) calc(var(--spacing-unit) * 1); /* Padding réduit */
+        padding: calc(var(--spacing-unit) * 0.6) calc(var(--spacing-unit) * 1);
         min-width: unset;
     }
     .countdown-message {
-        font-size: var(--font-size-xsmall); /* Taille réduite */
-        margin-bottom: calc(var(--spacing-unit) * 1.5); /* Marge ajustée */
+        font-size: var(--font-size-xsmall);
+        margin-bottom: calc(var(--spacing-unit) * 1.5);
     }
     .countdown-digit {
-        font-size: 2rem; /* Taille réduite */
+        font-size: 2rem;
     }
     .countdown-label {
         font-size: var(--font-size-xsmall);
         margin-top: calc(var(--spacing-unit) * 0.25);
     }
     .countdown-note {
-        font-size: var(--font-size-xsmall); /* Taille réduite */
+        font-size: var(--font-size-xsmall);
     }
     .product-offers-grid {
         grid-template-columns: 1fr;
@@ -1777,15 +1780,15 @@ section h2::after {
         gap: calc(var(--spacing-unit) * 1.5);
     }
     .price-block .price {
-        font-size: 1.8rem; /* Taille ajustée */
+        font-size: 1.8rem;
     }
     .price-block .discount-badge {
-        font-size: var(--font-size-xsmall); /* Taille réduite */
+        font-size: var(--font-size-xsmall);
         padding: calc(var(--spacing-unit) * 0.4) calc(var(--spacing-unit) * 0.8);
         transform: rotate(0deg);
     }
     .offers-section .offers-final-cta-text {
-        font-size: var(--font-size-small); /* Taille réduite */
+        font-size: var(--font-size-small);
         margin-top: calc(var(--spacing-unit) * 3);
     }
 }
@@ -1892,7 +1895,7 @@ section h2::after {
 
 .faq-accordion-container {
     max-width: 900px;
-    margin: calc(var(--spacing-unit) * 6.25) auto 0 auto; /* Conversion en calc() (était 50px) */
+    margin: calc(var(--spacing-unit) * 6.25) auto 0 auto;
     text-align: left;
 }
 
@@ -1900,14 +1903,14 @@ section h2::after {
     background-color: var(--color-background-primary); /* Conserve le fond crème clair "Chez Nous" pour chaque item */
     border: 1px solid var(--color-border-light);
     border-radius: 10px;
-    margin-bottom: calc(var(--spacing-unit) * 2.5); /* Conversion en calc() (était 20px) */
-    box-shadow: var(--shadow-light);
+    margin-bottom: calc(var(--spacing-unit) * 2.5);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04); /* OMBRE ADOUCIE (était var(--shadow-light)) */
     overflow: hidden;
     transition: all 0.3s ease;
 }
 
 .faq-item:hover {
-    box-shadow: var(--shadow-medium);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); /* OMBRE DE HOVER ADOUCIE (était var(--shadow-medium)) */
 }
 
 .accordion-toggle {
@@ -1918,23 +1921,23 @@ section h2::after {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: calc(var(--spacing-unit) * 2.5) calc(var(--spacing-unit) * 3.75); /* Conversion en calc() (était 20px 30px) */
+    padding: calc(var(--spacing-unit) * 2.5) calc(var(--spacing-unit) * 3.75);
     font-size: 1.25em; /* Taille inchangée */
     font-weight: 600;
-    color: var(--color-chez-nous-dark-text); /* Nouvelle couleur de titre "Chez Nous" */
-    background-color: var(--color-background-card); /* Nouvelle couleur de fond "Chez Nous" (blanc pur) pour l'entête */
+    color: var(--color-chez-nous-dark-text);
+    background-color: var(--color-background-card);
     cursor: pointer;
     border-bottom: 1px solid var(--color-border-light);
     transition: background-color 0.3s ease;
 }
 
 .accordion-header:hover {
-    background-color: var(--color-background-secondary); /* Nouvelle couleur de fond "Chez Nous" au survol */
+    background-color: var(--color-background-secondary);
 }
 
 .accordion-icon {
     font-size: 0.9em; /* Taille inchangée */
-    color: var(--color-chez-nous-primary); /* Nouvelle couleur principale "Chez Nous" pour l'icône */
+    color: var(--color-chez-nous-primary);
     transition: transform 0.3s ease;
 }
 
@@ -1946,98 +1949,95 @@ section h2::after {
     max-height: 0;
     overflow: hidden;
     transition: max-height 0.4s ease-out, padding 0.4s ease-out;
-    padding: 0 calc(var(--spacing-unit) * 3.75); /* Conversion en calc() (était 0 30px) */
+    padding: 0 calc(var(--spacing-unit) * 3.75);
 }
 
 .accordion-toggle:checked + .accordion-header + .accordion-content {
-    max-height: 1000px; /* **CORRECTION ICI : Augmentation de la hauteur maximale pour ne pas couper le contenu** */
-    padding: calc(var(--spacing-unit) * 2.5) calc(var(--spacing-unit) * 3.75); /* Conversion en calc() (était 20px 30px) */
+    max-height: 1000px;
+    padding: calc(var(--spacing-unit) * 2.5) calc(var(--spacing-unit) * 3.75);
 }
 
 .accordion-content p {
     font-size: 1.05em; /* Taille inchangée */
-    color: var(--color-chez-nous-body-text); /* Nouvelle couleur de texte "Chez Nous" */
+    color: var(--color-chez-nous-body-text);
     line-height: 1.7;
 }
 
 .accordion-content p strong {
-    color: var(--color-chez-nous-primary); /* Nouvelle couleur principale "Chez Nous" pour le texte fort */
+    color: var(--color-chez-nous-primary);
     font-weight: 700;
 }
 
 /* --- MEDIA QUERIES pour la section FAQ --- */
 @media (max-width: 992px) {
     .faq-accordion-container {
-        margin-top: calc(var(--spacing-unit) * 5); /* Conversion en calc() (était 40px) */
+        margin-top: calc(var(--spacing-unit) * 5);
     }
     .accordion-header {
-        font-size: 1.15em; /* Taille inchangée */
-        padding: calc(var(--spacing-unit) * 2.25) calc(var(--spacing-unit) * 3.125); /* Conversion en calc() (était 18px 25px) */
+        font-size: 1.15em;
+        padding: calc(var(--spacing-unit) * 2.25) calc(var(--spacing-unit) * 3.125);
     }
     .accordion-content {
-        padding: 0 calc(var(--spacing-unit) * 3.125); /* Conversion en calc() (était 0 25px) */
+        padding: 0 calc(var(--spacing-unit) * 3.125);
     }
     .accordion-toggle:checked + .accordion-header + .accordion-content {
-        max-height: 1000px; /* Assurer que la correction s'applique aussi aux media queries */
-        padding: calc(var(--spacing-unit) * 1.875) calc(var(--spacing-unit) * 3.125); /* Conversion en calc() (était 15px 25px) */
+        max-height: 1000px;
+        padding: calc(var(--spacing-unit) * 1.875) calc(var(--spacing-unit) * 3.125);
     }
     .accordion-content p {
-        font-size: 1em; /* Taille inchangée */
+        font-size: 1em;
     }
 }
 
 @media (max-width: 768px) {
     .faq-section {
-        padding: calc(var(--spacing-unit) * 7.5) 0; /* Conversion en calc() (était 60px 0) */
+        padding: calc(var(--spacing-unit) * 7.5) 0;
     }
     .faq-accordion-container {
-        margin-top: calc(var(--spacing-unit) * 3.75); /* Conversion en calc() (était 30px) */
+        margin-top: calc(var(--spacing-unit) * 3.75);
     }
     .faq-item {
-        margin-bottom: calc(var(--spacing-unit) * 1.875); /* Conversion en calc() (était 15px) */
+        margin-bottom: calc(var(--spacing-unit) * 1.875);
     }
     .accordion-header {
-        font-size: 1.05em; /* Taille inchangée */
-        padding: calc(var(--spacing-unit) * 1.875) calc(var(--spacing-unit) * 2.5); /* Conversion en calc() (était 15px 20px) */
+        font-size: 1.05em;
+        padding: calc(var(--spacing-unit) * 1.875) calc(var(--spacing-unit) * 2.5);
     }
     .accordion-icon {
-        font-size: 0.8em; /* Taille inchangée */
+        font-size: 0.8em;
     }
     .accordion-content {
-        padding: 0 calc(var(--spacing-unit) * 2.5); /* Conversion en calc() (était 0 20px) */
+        padding: 0 calc(var(--spacing-unit) * 2.5);
     }
     .accordion-toggle:checked + .accordion-header + .accordion-content {
-        max-height: 1000px; /* Assurer que la correction s'applique aussi aux media queries */
-        padding: calc(var(--spacing-unit) * 1.875) calc(var(--spacing-unit) * 2.5); /* Conversion en calc() (était 15px 20px) */
+        max-height: 1000px;
+        padding: calc(var(--spacing-unit) * 1.875) calc(var(--spacing-unit) * 2.5);
     }
     .accordion-content p {
-        font-size: 0.95em; /* Taille inchangée */
+        font-size: 0.95em;
     }
 }
 
 @media (max-width: 480px) {
     .accordion-header {
-        font-size: 1em; /* Taille inchangée */
-        padding: calc(var(--spacing-unit) * 1.5) calc(var(--spacing-unit) * 1.875); /* Conversion en calc() (était 12px 15px) */
+        font-size: 1em;
+        padding: calc(var(--spacing-unit) * 1.5) calc(var(--spacing-unit) * 1.875);
     }
     .accordion-content {
-        padding: 0 calc(var(--spacing-unit) * 1.875); /* Conversion en calc() (était 0 15px) */
+        padding: 0 calc(var(--spacing-unit) * 1.875);
     }
     .accordion-toggle:checked + .accordion-header + .accordion-content {
-        max-height: 1000px; /* Assurer que la correction s'applique aussi aux media queries */
-        padding: calc(var(--spacing-unit) * 1.5) calc(var(--spacing-unit) * 1.875); /* Conversion en calc() (était 12px 15px) */
+        max-height: 1000px;
+        padding: calc(var(--spacing-unit) * 1.5) calc(var(--spacing-unit) * 1.875);
     }
     .accordion-content p {
-        font-size: 0.9em; /* Taille inchangée */
+        font-size: 0.9em;
     }
 }
-
-
 /* ========================================= */
 /* --- SECTION PRIX --- */
 /* ========================================= */
 .final-cta-section {
-    /* CORRECTION CONTRASTE : FOND SOMBRE ET UNI POUR UNE LISIBILITÉ MAXIMALE DU TEXTE BLANC */
     background: var(--color-chez-nous-dark-text); /* Utilise la couleur gris-bleu foncé pour un contraste élevé */
     padding: calc(var(--spacing-unit) * 12) 0;
     text-align: center;
@@ -2049,7 +2049,7 @@ section h2::after {
 .final-cta-section .cta-main-icon {
     font-size: 6rem; /* Taille inchangée */
     color: var(--color-background-card); /* Icône blanche */
-    filter: drop-shadow(0 calc(var(--spacing-unit) * 0.625) calc(var(--spacing-unit) * 1.875) rgba(0, 0, 0, 0.3));
+    filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.1)); /* OMBRE ADOUCIE (était 0 5px 15px rgba(0,0,0,0.3)) */
     margin-bottom: calc(var(--spacing-unit) * 4);
     display: block;
 }
@@ -2072,7 +2072,7 @@ section h2::after {
     text-align: center;
     max-width: 800px;
     margin: 0 auto calc(var(--spacing-unit) * 5) auto;
-    color: rgba(255, 255, 255, 0.9); /* Conserve la transparence pour le blanc */
+    color: rgba(255, 255, 255, 0.9);
     line-height: 1.7;
 }
 
@@ -2086,26 +2086,26 @@ section h2::after {
     align-items: center;
     justify-content: center;
     gap: calc(var(--spacing-unit) * 2);
-    box-shadow: var(--shadow-small);
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.05); /* OMBRE ADOUCIE (était var(--shadow-small)) */
     backdrop-filter: blur(5px);
     -webkit-backdrop-filter: blur(5px);
 }
 
 .cta-highlight-message .cta-highlight-icon {
     font-size: 2.5rem; /* Taille inchangée */
-    color: var(--color-background-card); /* Icône blanche */
+    color: var(--color-background-card);
 }
 
 .cta-highlight-message p {
     font-size: var(--font-size-xl); /* Taille inchangée */
     font-weight: var(--font-weight-bold);
-    color: var(--color-background-card); /* Texte blanc */
+    color: var(--color-background-card);
     line-height: 1.3;
     margin: 0;
 }
 
 .cta-highlight-message strong {
-    color: var(--color-chez-nous-secondary); /* Nouvelle couleur secondaire "Chez Nous" (Or doux) */
+    color: var(--color-chez-nous-secondary);
     text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
 }
 
@@ -2113,10 +2113,9 @@ section h2::after {
     font-size: var(--font-size-h4); /* Taille inchangée */
     padding: calc(var(--spacing-unit) * 3) calc(var(--spacing-unit) * 6);
     border-radius: var(--border-radius-pill);
-    /* DÉGRADÉ DU BOUTON : Mettre en avant la couleur Chez Nous primaire/secondaire sur un fond sombre */
     background: linear-gradient(90deg, var(--color-chez-nous-primary), var(--color-chez-nous-secondary));
-    color: var(--color-background-card); /* Texte blanc */
-    box-shadow: 0 calc(var(--spacing-unit) * 1) calc(var(--spacing-unit) * 3) rgba(0, 0, 0, 0.3);
+    color: var(--color-background-card);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); /* OMBRE ADOUCIE (était 0 8px 25px rgba(0,0,0,0.3)) */
     border: none;
     cursor: pointer;
     transition: all 0.3s ease-in-out;
@@ -2129,8 +2128,7 @@ section h2::after {
 
 .final-cta-section .cta-button.main-cta.oversized-cta:hover {
     transform: translateY(calc(var(--spacing-unit) * -0.625)) scale(1.02);
-    box-shadow: 0 calc(var(--spacing-unit) * 1.5) calc(var(--spacing-unit) * 4.375) rgba(0, 0, 0, 0.4);
-    /* DÉGRADÉ DU BOUTON AU SURVOL : Inverser ou assombrir légèrement */
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25); /* OMBRE DE HOVER ADOUCIE (était 0 12px 35px rgba(0,0,0,0.4)) */
     background: linear-gradient(90deg, var(--color-chez-nous-secondary), var(--color-chez-nous-primary));
 }
 
@@ -2141,15 +2139,15 @@ section h2::after {
 
 .trust-indicators-final p {
     font-size: var(--font-size-large); /* Taille inchangée */
-    color: rgba(255, 255, 255, 0.8); /* Conserve la transparence pour le blanc */
+    color: rgba(255, 255, 255, 0.8);
     margin-bottom: calc(var(--spacing-unit) * 2);
 }
 
 .trust-indicators-final .payment-icons i {
     font-size: 3rem; /* Taille inchangée */
-    color: var(--color-background-card); /* Icônes blanches */
+    color: var(--color-background-card);
     margin: 0 calc(var(--spacing-unit) * 1.5);
-    filter: drop-shadow(0 calc(var(--spacing-unit) * 0.25) calc(var(--spacing-unit) * 0.625) rgba(0, 0, 0, 0.2));
+    filter: drop-shadow(0 1px 4px rgba(0, 0, 0, 0.1)); /* OMBRE ADOUCIE (était 0 2px 5px rgba(0,0,0,0.2)) */
 }
 
 .contact-info-final {
@@ -2160,7 +2158,7 @@ section h2::after {
 
 .contact-info-final p {
     font-size: var(--font-size-base); /* Taille inchangée */
-    color: rgba(255, 255, 255, 0.7); /* Conserve la transparence pour le blanc */
+    color: rgba(255, 255, 255, 0.7);
     margin-bottom: calc(var(--spacing-unit) * 1.5);
 }
 
@@ -2228,7 +2226,6 @@ section h2::after {
     }
 }
 
-
 /* ========================================= */
 /* SECTION GARANTIE (NOUVELLE STRUCTURE) */
 /* Ce bloc gère l'apparence de la section de garantie de 30 jours, */
@@ -2242,13 +2239,13 @@ section h2::after {
 
 .guarantee-section .icon-section {
     color: var(--color-chez-nous-accent); /* Nouvelle couleur d'accent "Chez Nous" (vert) pour l'icône de section */
-    margin-bottom: calc(var(--spacing-unit) * 2.5); /* Conversion en calc() (était 20px) */
+    margin-bottom: calc(var(--spacing-unit) * 2.5);
 }
 
 .guarantee-section .section-intro {
     font-size: var(--font-size-large); /* Taille inchangée */
     max-width: 800px;
-    margin: 0 auto calc(var(--spacing-unit) * 6.25) auto; /* Conversion en calc() (était 50px) */
+    margin: 0 auto calc(var(--spacing-unit) * 6.25) auto;
     color: var(--color-chez-nous-body-text); /* Nouvelle couleur de texte "Chez Nous" */
 }
 
@@ -2256,23 +2253,23 @@ section h2::after {
     background-color: var(--color-background-secondary); /* Nouvelle couleur de fond "Chez Nous" pour le bloc de contenu */
     border: 1px solid var(--color-border-light);
     border-radius: 15px;
-    box-shadow: var(--shadow-medium);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06); /* OMBRE ADOUCIE (était var(--shadow-medium)) */
     max-width: 800px;
-    margin: calc(var(--spacing-unit) * 6.25) auto 0 auto; /* Conversion en calc() (était 50px) */
-    padding: calc(var(--spacing-unit) * 5); /* Conversion en calc() (était 40px) */
+    margin: calc(var(--spacing-unit) * 6.25) auto 0 auto;
+    padding: calc(var(--spacing-unit) * 5);
     text-align: center;
 }
 
 .guarantee-content-block .guarantee-icon-large {
     font-size: 4em; /* Taille inchangée */
     color: var(--color-chez-nous-accent); /* Nouvelle couleur d'accent "Chez Nous" (vert) pour la grande icône */
-    margin-bottom: calc(var(--spacing-unit) * 3.125); /* Conversion en calc() (était 25px) */
+    margin-bottom: calc(var(--spacing-unit) * 3.125);
 }
 
 .guarantee-content-block h3 {
     font-size: 2em; /* Taille inchangée */
     color: var(--color-chez-nous-dark-text); /* Nouvelle couleur de titre "Chez Nous" */
-    margin-bottom: calc(var(--spacing-unit) * 2.5); /* Conversion en calc() (était 20px) */
+    margin-bottom: calc(var(--spacing-unit) * 2.5);
     font-weight: 700;
 }
 
@@ -2280,7 +2277,7 @@ section h2::after {
     font-size: 1.1em; /* Taille inchangée */
     color: var(--color-chez-nous-body-text); /* Nouvelle couleur de texte "Chez Nous" */
     line-height: 1.7;
-    margin-bottom: calc(var(--spacing-unit) * 1.875); /* Conversion en calc() (était 15px) */
+    margin-bottom: calc(var(--spacing-unit) * 1.875);
 }
 
 .guarantee-content-block p strong {
@@ -2292,20 +2289,20 @@ section h2::after {
     font-size: 1.2em; /* Taille inchangée */
     color: var(--color-chez-nous-primary); /* Nouvelle couleur principale "Chez Nous" pour le texte CTA */
     font-weight: 600;
-    margin-top: calc(var(--spacing-unit) * 3.125); /* Conversion en calc() (était 25px) */
-    margin-bottom: calc(var(--spacing-unit) * 3.125); /* Conversion en calc() (était 25px) */
+    margin-top: calc(var(--spacing-unit) * 3.125);
+    margin-bottom: calc(var(--spacing-unit) * 3.125);
 }
 
 .guarantee-section .guarantee-cta-message {
     font-size: 1.15em; /* Taille inchangée */
     color: var(--color-chez-nous-body-text); /* Nouvelle couleur de texte "Chez Nous" */
-    margin-top: calc(var(--spacing-unit) * 7.5); /* Conversion en calc() (était 60px) */
-    margin-bottom: calc(var(--spacing-unit) * 3.125); /* Conversion en calc() (était 25px) */
+    margin-top: calc(var(--spacing-unit) * 7.5);
+    margin-bottom: calc(var(--spacing-unit) * 3.125);
     font-weight: 600;
 }
 
 .guarantee-section .cta-button {
-    margin-top: calc(var(--spacing-unit) * 5); /* Conversion en calc() (était 40px) */
+    margin-top: calc(var(--spacing-unit) * 5);
 }
 
 /* ========================================= */
@@ -2314,61 +2311,61 @@ section h2::after {
 
 @media (max-width: 992px) {
     .guarantee-content-block {
-        padding: calc(var(--spacing-unit) * 4.375); /* Conversion en calc() (était 35px) */
+        padding: calc(var(--spacing-unit) * 4.375);
     }
     .guarantee-content-block .guarantee-icon-large {
-        font-size: 3.5em; /* Taille inchangée */
-        margin-bottom: calc(var(--spacing-unit) * 2.5); /* Conversion en calc() (était 20px) */
+        font-size: 3.5em;
+        margin-bottom: calc(var(--spacing-unit) * 2.5);
     }
     .guarantee-content-block h3 {
-        font-size: 1.8em; /* Taille inchangée */
+        font-size: 1.8em;
     }
     .guarantee-content-block p {
-        font-size: 1.05em; /* Taille inchangée */
+        font-size: 1.05em;
     }
     .guarantee-content-block .guarantee-cta-text {
-        font-size: 1.1em; /* Taille inchangée */
+        font-size: 1.1em;
     }
 }
 
 @media (max-width: 768px) {
     .guarantee-section {
-        padding: calc(var(--spacing-unit) * 7.5) 0; /* Conversion en calc() (était 60px 0) */
+        padding: calc(var(--spacing-unit) * 7.5) 0;
     }
     .guarantee-content-block {
-        margin-top: calc(var(--spacing-unit) * 5); /* Conversion en calc() (était 40px) */
-        padding: calc(var(--spacing-unit) * 3.75); /* Conversion en calc() (était 30px) */
+        margin-top: calc(var(--spacing-unit) * 5);
+        padding: calc(var(--spacing-unit) * 3.75);
     }
     .guarantee-content-block .guarantee-icon-large {
-        font-size: 3em; /* Taille inchangée */
-        margin-bottom: calc(var(--spacing-unit) * 1.875); /* Conversion en calc() (était 15px) */
+        font-size: 3em;
+        margin-bottom: calc(var(--spacing-unit) * 1.875);
     }
     .guarantee-content-block h3 {
-        font-size: 1.6em; /* Taille inchangée */
+        font-size: 1.6em;
     }
     .guarantee-content-block p {
-        font-size: 1em; /* Taille inchangée */
+        font-size: 1em;
     }
     .guarantee-content-block .guarantee-cta-text {
-        font-size: 1.05em; /* Taille inchangée */
+        font-size: 1.05em;
     }
 }
 
 @media (max-width: 480px) {
     .guarantee-content-block {
-        padding: calc(var(--spacing-unit) * 3.125); /* Conversion en calc() (était 25px) */
+        padding: calc(var(--spacing-unit) * 3.125);
     }
     .guarantee-content-block .guarantee-icon-large {
-        font-size: 2.5em; /* Taille inchangée */
+        font-size: 2.5em;
     }
     .guarantee-content-block h3 {
-        font-size: 1.4em; /* Taille inchangée */
+        font-size: 1.4em;
     }
     .guarantee-content-block p {
-        font-size: 0.95em; /* Taille inchangée */
+        font-size: 0.95em;
     }
     .guarantee-content-block .guarantee-cta-text {
-        font-size: 1em; /* Taille inchangée */
+        font-size: 1em;
     }
 }
 
