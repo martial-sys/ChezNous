@@ -697,9 +697,19 @@
         const priceEur = parseFloat(urlParams.get('price_eur')) || 0; // Convertir en nombre
         const priceFcfa = parseFloat(urlParams.get('price_fcfa')) || 0; // Convertir en nombre
         const productImage = urlParams.get('image') || '';
-        const productSlug = urlParams.get('product') || 'pack';
+        const productSlug = urlParams.get('product') || 'pack'; // Default to pack slug
 
-        // Mise à jour des éléments visuels de la page
+        // ============================================================
+        // MAPPING DES SLUGS PRODUITS VERS LES URLS CHARIOW SPÉCIFIQUES
+        // ============================================================
+        const chariowProductUrls = {
+            'argent': 'https://arqwgrvq.mychariow.com/prd_ec4ngv/checkout', // URL pour "L'Argent" 
+            'limites': 'https://arqwgrvq.mychariow.com/prd_dmkqnc/checkout', // URL pour "Tes Limites" 
+            'mots': 'https://arqwgrvq.mychariow.com/prd_4zz2te/checkout',   // URL pour "Le Pouvoir de Tes Mots" 
+            'pack': 'https://arqwgrvq.mychariow.com/prd_1dop87/checkout'   // URL pour le "Pack Complet" 
+        };
+
+        // Mise à jour des éléments visuels de la page (reste inchangé)
         document.getElementById('product-summary-name').textContent = productName;
         if (productImage) {
             document.getElementById('product-summary-image').src = productImage;
@@ -715,9 +725,9 @@
         }
         document.getElementById('product-summary-price').textContent = priceText;
 
-        // Logique pour les bénéfices spécifiques (doit correspondre à la page principale)
+        // Logique pour les bénéfices spécifiques (reste inchangé)
         const benefitsList = document.getElementById('product-summary-benefits');
-        benefitsList.innerHTML = ''; // Nettoyer les bénéfices par défaut
+        benefitsList.innerHTML = '';
 
         let specificBenefits = [];
         switch(productSlug) {
@@ -760,30 +770,42 @@
             benefitsList.appendChild(li);
         });
 
-        // Redirection vers Chariow et Suivi GA4
+        // ============================================================
+        // MISE À JOUR DE L'URL DU BOUTON VERS CHARIOW ET SUIVI GA4
+        // ============================================================
         const proceedButton = document.getElementById('proceed-to-chariow');
-        const chariowBaseUrl = "[URL_PAGE_INFO_PERSONNEL_CHARIOW]"; // TRÈS IMPORTANT : REMPLACER CETTE URL
         
-        // Reconstruire l'URL de Chariow avec tous les paramètres reçus
-        const finalChariowUrl = `${chariowBaseUrl}?${urlParams.toString()}`;
-        proceedButton.href = finalChariowUrl;
+        // Récupérer l'URL Chariow spécifique pour le produit actuel
+        const chariowBaseUrl = chariowProductUrls[productSlug]; 
+        
+        if (chariowBaseUrl) {
+            // Reconstruire l'URL de Chariow avec tous les paramètres passés initialement
+            // Cela inclut productName, price_eur, price_fcfa, image, etc.
+            const finalChariowUrl = `${chariowBaseUrl}?${urlParams.toString()}`;
+            proceedButton.href = finalChariowUrl;
 
-        // Suivi GA4 du clic vers Chariow
-        proceedButton.addEventListener('click', () => {
-            trackGA4Event('begin_checkout', { // Événement GA4 standard pour le début du processus de paiement
-                currency: 'EUR', // Ou 'XOF' si tu préfères la devise locale
-                value: priceEur, // La valeur de la commande en EUR
-                items: [{
-                    item_id: productSlug,
-                    item_name: productName,
-                    currency: 'EUR',
-                    price: priceEur,
-                    quantity: 1
-                }],
-                event_category: 'Conversion - Checkout',
-                event_label: `Redirection Chariow: ${productName}`
+            // Suivi GA4 du clic vers Chariow
+            proceedButton.addEventListener('click', () => {
+                trackGA4Event('begin_checkout', { // Événement GA4 standard pour le début du processus de paiement
+                    currency: 'EUR', // Ou 'XOF' si tu préfères la devise locale
+                    value: priceEur, // La valeur de la commande en EUR
+                    items: [{
+                        item_id: productSlug,
+                        item_name: productName,
+                        currency: 'EUR',
+                        price: priceEur,
+                        quantity: 1
+                    }],
+                    event_category: 'Conversion - Checkout',
+                    event_label: `Redirection Chariow: ${productName}`
+                });
             });
-        });
+        } else {
+            console.error(`Erreur : URL Chariow non trouvée pour le slug produit : ${productSlug}`);
+            proceedButton.href = '#'; // Lien de secours ou désactivation
+            proceedButton.textContent = 'Problème de configuration (contactez le support)';
+            proceedButton.style.backgroundColor = 'var(--color-error-red)';
+        }
     });
 </script>
 </body>
